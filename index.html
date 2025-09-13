@@ -22,13 +22,13 @@
     background:linear-gradient(to right,var(--grid)1px,transparent 1px) 0 0/40px 40px,
                linear-gradient(to bottom,var(--grid)1px,transparent 1px) 0 0/40px 40px;opacity:.75}
 
-  /* CURVED BUNTING – split into two arcs with a middle gap */
-  .bunting{position:fixed;left:0;right:0;top:0;height:120px;pointer-events:none;z-index:2}
+  /* ===== BUNTING: two curved strings with flags following the curve ===== */
+  .bunting{position:fixed;left:0;right:0;top:0;height:130px;pointer-events:none;z-index:2}
   .bunting svg{width:100%;height:100%}
-  .bunting .string{fill:none;stroke:#ff6e86;stroke-width:8;stroke-linecap:round;filter:drop-shadow(0 4px 0 #ffb4c1)}
-  .bunting .flag{stroke:#111;stroke-width:3;filter:drop-shadow(0 2px 0 #0004)}
+  .string{fill:none;stroke:#ff6e86;stroke-width:8;stroke-linecap:round;filter:drop-shadow(0 4px 0 #ffb4c1)}
+  .flag{stroke:#111;stroke-width:3;filter:drop-shadow(0 2px 0 #0004)}
 
-  /* Layout – CENTERED vertically */
+  /* Layout – centered vertically */
   .wrap{position:relative;height:100%;display:flex;align-items:center;justify-content:center}
   .stage{position:relative;width:min(1200px,100vw);height:min(680px,56.25vw)}
 
@@ -45,7 +45,7 @@
         filter:drop-shadow(0 6px 0 #0002);
         transform:translateY(40px);opacity:0;letter-spacing:-0.03em}
 
-  /* Hat on Y of Happy (bigger cone) */
+  /* Hat on Y of Happy (bigger) */
   .hat{position:absolute;width:clamp(36px,5.6vw,72px);height:clamp(36px,5.6vw,72px);left:58%;top:-24%;
        transform-origin:30% 90%;animation:hatSlide 2.6s ease-in-out infinite}
   @keyframes hatSlide{0%,100%{transform:translateX(-6px) rotate(10deg)}50%{transform:translateX(4px) rotate(16deg)}}
@@ -60,7 +60,7 @@
   .nameTag{position:absolute;bottom:-34px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:999px;background:var(--pill);color:#111;
            border:3px solid #111;font-family:'Nunito';font-weight:900;box-shadow:0 8px 0 #0002,inset 0 -5px 0 var(--pill-d);opacity:0}
 
-  /* Glittering background (on gate + main) */
+  /* Glittering background (gate + main) */
   .sparkle{position:fixed;pointer-events:none;font-size:28px;opacity:0;text-shadow:0 0 10px #fff6,0 0 18px #ffd7;z-index:25}
 
   /* Popup */
@@ -75,17 +75,24 @@
   .rightMsg h3{margin:6px 0 12px;font-family:'Baloo 2';font-size:28px}
   .rightMsg p{margin:0;font-size:18px;line-height:1.55;white-space:pre-wrap}
 
-  /* Gate (gift.jpg as animated card) */
+  /* Gate (gift.jpg) */
   .gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:20}
-  .gateInner{display:flex;flex-direction:column;align-items:center;gap:16px}
-  .giftImg{width:220px;height:220px;border-radius:30px;overflow:hidden;position:relative;background:#ff9db0 center/cover no-repeat}
+  .gateInner{display:flex;flex-direction:column;align-items:center;gap:18px}
+  .giftWrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .giftImg{width:220px;height:220px;border-radius:30px;overflow:hidden;position:relative;background:#ff9db0 center/cover no-repeat;border:4px solid #111;box-shadow:0 12px 0 #0002}
   .giftImg img{width:100%;height:100%;object-fit:cover;display:block}
   .bob{animation:bob 2.2s ease-in-out infinite}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
   .sheen{position:absolute;inset:0;border-radius:30px;background:linear-gradient(120deg,#ffffff66 0 10%,transparent 10% 60%,#ffffff33 60% 68%,transparent 68% 100%);mix-blend-mode:screen;animation:sheen 2.8s linear infinite}
   @keyframes sheen{0%{background-position:-200% 0}100%{background-position:200% 0}}
 
-  /* Cursive label (Monotype Corsiva style) */
+  /* Curved OPEN IT text above the gift */
+  .openArc{position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:280px;height:90px;pointer-events:none}
+  .openArc text{font-family:'Monotype Corsiva','Great Vibes','Segoe Script',cursive;fill:#111;font-size:34px;filter:drop-shadow(0 2px 0 #fff)}
+  .openArc g{animation:pulseZoom 1.6s ease-in-out infinite}
+  @keyframes pulseZoom{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+
+  /* Cursive label for name (no bullet) */
   .typeLabel{font-family:'Monotype Corsiva','Great Vibes','Segoe Script',cursive;font-size:28px;font-weight:700;letter-spacing:.3px;
     background:#fff;border:3px solid #111;padding:10px 18px;border-radius:14px;box-shadow:0 8px 0 #0002}
   .nameInput{padding:12px 14px;border-radius:12px;border:3px solid #111;font-family:'Nunito';font-weight:800;width:min(360px,80vw);background:#fff}
@@ -94,46 +101,91 @@
 <body>
 <div class="grid"></div>
 
-<!-- BUNTING (two arcs with a gap in the middle) -->
+<!-- ===== BUNTING (two hanging arcs, flags follow curve) ===== -->
 <div class="bunting">
-  <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+  <svg viewBox="0 0 1200 130" preserveAspectRatio="none">
     <defs>
       <linearGradient id="triPink" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#ff8fa3"/><stop offset="1" stop-color="#ff5a71"/>
       </linearGradient>
-      <g id="flagpair">
-        <polygon class="flag" fill="url(#triPink)" points="0,42 32,42 16,86"/>
-        <polygon class="flag" fill="#ffd4db"    points="34,42 66,42 50,86"/>
-      </g>
+      <!-- a single flag -->
+      <polygon id="tri" class="flag" points="0,0 24,0 12,28" fill="url(#triPink)"/>
+      <polygon id="triL" class="flag" points="0,0 24,0 12,28" fill="#ffd4db"/>
     </defs>
 
-    <!-- left arc -->
-    <path class="string" d="M0,52 Q260,6 520,46" />
-    <use href="#flagpair" x="10"/><use href="#flagpair" x="70"/><use href="#flagpair" x="130"/>
-    <use href="#flagpair" x="190"/><use href="#flagpair" x="250"/><use href="#flagpair" x="310"/>
-    <use href="#flagpair" x="370"/><use href="#flagpair" x="430"/><use href="#flagpair" x="490"/>
+    <!-- strings -->
+    <path id="leftStr"  class="string" d="M-40,78 Q260,12 520,70" />
+    <path id="rightStr" class="string" d="M680,70 Q940,12 1240,78" />
 
-    <!-- right arc (gap around the middle) -->
-    <path class="string" d="M680,46 Q940,6 1200,52" />
-    <use href="#flagpair" x="700"/><use href="#flagpair" x="760"/><use href="#flagpair" x="820"/>
-    <use href="#flagpair" x="880"/><use href="#flagpair" x="940"/><use href="#flagpair" x="1000"/>
-    <use href="#flagpair" x="1060"/><use href="#flagpair" x="1120"/><use href="#flagpair" x="1180"/>
+    <!-- left chain of flags, rotated & dropped to look hung -->
+    <g transform="translate(30,62) rotate(-9)">
+      <use href="#tri"  transform="translate(0,0)"/>
+      <use href="#triL" transform="translate(32,2) rotate(-2)"/>
+      <use href="#tri"  transform="translate(64,4) rotate(-4)"/>
+      <use href="#triL" transform="translate(96,7) rotate(-6)"/>
+      <use href="#tri"  transform="translate(128,9) rotate(-8)"/>
+      <use href="#triL" transform="translate(160,12) rotate(-10)"/>
+      <use href="#tri"  transform="translate(192,14) rotate(-12)"/>
+      <use href="#triL" transform="translate(224,16) rotate(-14)"/>
+      <use href="#tri"  transform="translate(256,19) rotate(-16)"/>
+      <use href="#triL" transform="translate(288,21) rotate(-18)"/>
+      <use href="#tri"  transform="translate(320,23) rotate(-20)"/>
+      <use href="#triL" transform="translate(352,25) rotate(-22)"/>
+      <use href="#tri"  transform="translate(384,27) rotate(-24)"/>
+      <use href="#triL" transform="translate(416,28) rotate(-26)"/>
+      <use href="#tri"  transform="translate(448,29) rotate(-28)"/>
+    </g>
+
+    <!-- right chain of flags -->
+    <g transform="translate(720,62) rotate(9)">
+      <use href="#tri"  transform="translate(0,0)"/>
+      <use href="#triL" transform="translate(32,2) rotate(2)"/>
+      <use href="#tri"  transform="translate(64,4) rotate(4)"/>
+      <use href="#triL" transform="translate(96,7) rotate(6)"/>
+      <use href="#tri"  transform="translate(128,9) rotate(8)"/>
+      <use href="#triL" transform="translate(160,12) rotate(10)"/>
+      <use href="#tri"  transform="translate(192,14) rotate(12)"/>
+      <use href="#triL" transform="translate(224,16) rotate(14)"/>
+      <use href="#tri"  transform="translate(256,19) rotate(16)"/>
+      <use href="#triL" transform="translate(288,21) rotate(18)"/>
+      <use href="#tri"  transform="translate(320,23) rotate(20)"/>
+      <use href="#triL" transform="translate(352,25) rotate(22)"/>
+      <use href="#tri"  transform="translate(384,27) rotate(24)"/>
+      <use href="#triL" transform="translate(416,28) rotate(26)"/>
+      <use href="#tri"  transform="translate(448,29) rotate(28)"/>
+    </g>
   </svg>
 </div>
 
-<!-- GATE -->
+<!-- ===== Gate ===== -->
 <div class="gate" id="gate">
   <div class="gateInner">
-    <div class="giftImg bob" id="giftBox">
-      <img src="gift.jpg?v=2" alt="gift">
-      <div class="sheen"></div>
+    <div class="giftWrap">
+      <!-- Curved "Open it" label above gift -->
+      <svg class="openArc" viewBox="0 0 280 90">
+        <defs>
+          <path id="arcPath" d="M10,70 Q140,10 270,70"/>
+        </defs>
+        <g>
+          <text>
+            <textPath href="#arcPath" startOffset="50%" text-anchor="middle">Open it 🎁</textPath>
+          </text>
+        </g>
+      </svg>
+
+      <div class="giftImg bob" id="giftBox">
+        <img src="gift.jpg?v=3" alt="gift">
+        <div class="sheen"></div>
+      </div>
     </div>
+
+    <!-- Simple name label (no bullet) -->
     <div class="typeLabel" id="typeLabel"></div>
     <input class="nameInput" id="nameInput" placeholder="Type here…" />
   </div>
 </div>
 
-<!-- MAIN -->
+<!-- ===== Main scene ===== -->
 <div class="wrap">
   <div class="stage" id="scene" style="visibility:hidden">
     <div class="left">
@@ -151,7 +203,7 @@
 <!-- glittering bg -->
 <div id="sparkLayer"></div>
 
-<!-- POPUP -->
+<!-- Popup -->
 <div class="modalBack" id="modal">
   <div class="card" role="dialog" aria-modal="true">
     <button class="closeX" id="closeX">✕</button>
@@ -165,14 +217,17 @@
   </div>
 </div>
 
+<!-- Looping background music -->
+<audio id="bgm" src="ringtone.mp3" loop></audio>
+
 <script>
 /* ===== CONFIG ===== */
 const CONFIG = {
   bestieName: "Likhitha",
   buttonName: "Likki Bondam",
-  photoPath: "bestie.jpg?v=7",
-  giftPath:  "gift.jpg?v=2",
-  unlockWord: "bondam", // case-insensitive
+  photoPath: "bestie.jpg?v=8",
+  giftPath:  "gift.jpg?v=3",
+  unlockWord: "bondam",
   happy: "Happy",
   birthday: "Birthday",
   typeTitle: "To you 💖",
@@ -184,11 +239,11 @@ Happy birthday to you. I love you. 💗`,
   sparkSet: ["✨","🌟","💖","💫","🪄","⭐","🎈","🍬","💗","🎀","🎉","💕","💝"]
 };
 
-/* ===== helper: typewriter ===== */
+/* ===== typewriter ===== */
 function typewrite(el, text, speed=28, done){ el.textContent=''; let i=0;
   const t=setInterval(()=>{ el.textContent+= text[i++] || ''; if(i>text.length){clearInterval(t); done&&done();}}, speed);}
 
-/* ===== Sparkles / hearts / balloons / candies (runs from the start, also visible on gate) ===== */
+/* ===== Sparkles everywhere ===== */
 const sparkLayer = document.getElementById('sparkLayer');
 function sparkle(){
   const s=document.createElement('div'); s.className='sparkle';
@@ -204,12 +259,18 @@ function sparkle(){
 }
 setInterval(sparkle, 1000/CONFIG.sparklesPerSecond);
 
-/* ===== Gate logic ===== */
+/* ===== Audio autoplay + resume on interaction ===== */
+const bgm=document.getElementById('bgm');
+function tryPlay(){ bgm.play().catch(()=>{/* blocked until user gesture */}); }
+tryPlay();
+['click','touchstart','keydown'].forEach(evt=>document.addEventListener(evt,tryPlay,{once:false}));
+
+/* ===== Gate ===== */
 const gate = document.getElementById('gate');
 const typeLabel = document.getElementById('typeLabel');
 const nameInput = document.getElementById('nameInput');
 
-typewrite(typeLabel, "Open it 🎁  •  Enter your name", 22);
+typewrite(typeLabel, "Enter your name", 22); // no bullet
 
 let wrong = 0;
 nameInput.addEventListener('keydown', (e)=>{
@@ -222,11 +283,12 @@ nameInput.addEventListener('keydown', (e)=>{
     wrong++;
     typeLabel.textContent = wrong===1 ? "ehe ne name kadhu  nen pettindi"
                                       : "hehe oorike cheppa le.. nen pettindi kadhu nuv nannu pilchedhi";
-    nameInput.select();
+    // clear, but do NOT select/highlight
+    nameInput.value = "";
   }
 });
 
-/* ===== Build title letters ===== */
+/* ===== Build title ===== */
 const rowHappy = document.getElementById('rowHappy');
 const rowBirth = document.getElementById('rowBirth');
 
@@ -250,7 +312,6 @@ function animateWord(container, placeHatOnY=false){
       setTimeout(()=>el.style.transform="translateY(0)",740);
 
       if(placeHatOnY && el.textContent.toLowerCase()==='y'){
-        // SVG cone hat (bigger)
         const hat=document.createElementNS("http://www.w3.org/2000/svg","svg");
         hat.setAttribute("viewBox","0 0 100 100"); hat.classList.add("hat");
         hat.innerHTML=`<defs>
@@ -273,21 +334,18 @@ const nameTag = document.getElementById('nameTag');
 
 /* ===== Start scene ===== */
 function startScene(){
-  // text
   buildWord(rowHappy, CONFIG.happy, 'tile');
   buildWord(rowBirth, CONFIG.birthday, 'coral');
 
-  // content
   document.querySelector('.bestieName').textContent = CONFIG.bestieName;
   document.querySelector('.bestieFirst').textContent = CONFIG.buttonName;
   avatar.querySelector('img').src = CONFIG.photoPath;
 
   document.getElementById('scene').style.visibility='visible';
 
-  animateWord(rowHappy, true); // hat on Y (Happy)
+  animateWord(rowHappy, true); // hat on Y
   setTimeout(()=>animateWord(rowBirth,false), 110*CONFIG.happy.length + 240);
 
-  // avatar reveal
   setTimeout(()=>{
     avatar.style.transition="transform 1s ease, opacity 1s ease";
     nameTag.style.transition="opacity .8s ease .3s";
