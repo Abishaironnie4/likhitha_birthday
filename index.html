@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday</title>
+
+  <!-- GSAP for smooth timeline animations -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+  <!-- Fonts (cute rounded) -->
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ffe6ea;
+      --grid:#fddbe0;
+      --red:#ff5a71;
+      --red-dark:#e04457;
+      --ink:#1a1a1a;
+      --bubble:#ffb3c1;
+      --white:#fff;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      background: var(--bg);
+      font-family: 'Baloo 2', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      overflow:hidden; /* keeps floating bits inside frame for video */
+    }
+
+    /* Light grid background */
+    .grid {
+      position:fixed; inset:0; pointer-events:none;
+      background:
+        linear-gradient(to right, var(--grid) 1px, transparent 1px) 0 0/40px 40px,
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px) 0 0/40px 40px;
+      opacity:.7;
+    }
+
+    /* Corner bunting (flags) */
+    .bunting{
+      position:fixed; left:0; right:0; top:0; height:120px; pointer-events:none;
+    }
+    .bunting.bottom{ top:auto; bottom:0; transform:scaleX(-1) rotate(180deg)}
+    .bunting svg{width:100%; height:100%}
+
+    /* Main stage with safe frame 16:9 (nice for recording) */
+    .stage{
+      position:relative;
+      width: min(1200px, 100vw);
+      height: min(675px, 56.25vw); /* 16:9 */
+      margin: clamp(8px, 3vh, 24px) auto 0;
+    }
+
+    /* Left block: title + date + CTA */
+    .left{
+      position:absolute; left:4%; top:6%;
+      display:flex; flex-direction:column; gap:18px;
+    }
+    .title{
+      line-height:.9;
+      text-shadow: 0 4px 0 #00000040, 0 8px 0 #00000010;
+      display:flex; flex-direction:column;
+      color:var(--ink);
+    }
+    .word{
+      display:inline-flex; align-items:center; gap:10px;
+    }
+    .word .cap{
+      background:var(--white);
+      border:3px solid #000;
+      border-radius:8px 8px 16px 16px;
+      padding:2px 8px;
+      font-size: clamp(34px, 6vw, 88px);
+      font-weight:800;
+      box-shadow: 0 6px 0 #00000030;
+    }
+    .word .party{
+      width: clamp(26px, 4.2vw, 48px); height: clamp(26px, 4.2vw, 48px);
+      background: conic-gradient(from 40deg, #0b2a4a 0 60%, #ff5a71 0 100%);
+      border:3px solid #000; border-radius: 6px 6px 24px 6px;
+      transform: rotate(12deg);
+      position:relative;
+    }
+    .word .party::after{
+      content:""; position:absolute; right:-7px; top:-7px;
+      width:10px; height:10px; border-radius:50%;
+      background:var(--ink);
+    }
+    .word.big{
+      color:#ff5a71;
+      -webkit-text-stroke: 3px #000;
+      text-stroke: 3px #000;
+      font-size: clamp(34px, 6vw, 88px);
+      font-weight:800;
+      letter-spacing:1px;
+      filter: drop-shadow(0 6px 0 #00000030);
+    }
+
+    .pill{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      padding: 12px 22px;
+      width: fit-content;
+      border-radius: 999px;
+      background: var(--red);
+      border: 3px solid #000;
+      box-shadow: 0 8px 0 #00000020, inset 0 -4px 0 var(--red-dark);
+      color:#000;
+      font-weight:800;
+      font-family:'Nunito', system-ui;
+    }
+    .pill .star{font-size:20px}
+    .cta{ cursor:pointer; user-select:none; font-weight:800 }
+    .cta.small{ padding:10px 18px; font-size:16px }
+    .cta:hover{ transform:translateY(1px) }
+
+    /* Right block: profile circle + name tag */
+    .right{
+      position:absolute; right:5%; top:10%;
+      display:flex; align-items:center; justify-content:center; gap:20px;
+    }
+    .avatar{
+      width: clamp(260px, 36vw, 380px); height: clamp(260px, 36vw, 380px);
+      border-radius:50%;
+      overflow:hidden;
+      border:8px solid #000;
+      box-shadow: 0 16px 0 #00000010, 0 0 0 8px #00000005 inset;
+      background:#ddd center/cover no-repeat;
+    }
+    .nameTag{
+      position:absolute; bottom:-36px; left:50%; transform:translateX(-50%);
+      padding: 10px 22px;
+      border-radius:999px;
+      background:var(--red);
+      border:3px solid #000;
+      font-weight:900;
+      box-shadow: 0 8px 0 #00000020, inset 0 -4px 0 var(--red-dark);
+      display:flex; align-items:center; gap:10px;
+      font-family:'Nunito', system-ui;
+    }
+
+    /* Floating bits: balloons/hearts/stars */
+    .float-layer{ position:fixed; inset:0; pointer-events:none; overflow:hidden; }
+    .float{ position:absolute; opacity:0.85; }
+    .balloon{
+      width:48px; height:60px; border-radius:50% 50% 55% 55%;
+      background:var(--bubble); border:3px solid #000;
+      box-shadow: inset 0 -8px 0 #f79aa9;
+    }
+    .balloon::after{
+      content:""; position:absolute; bottom:-20px; left:50%;
+      width:3px; height:22px; background:#000; transform:translateX(-50%);
+    }
+    .heart,.star{
+      font-size:28px; filter: drop-shadow(0 3px 0 #00000020);
+    }
+
+    /* Popup */
+    .modalBack{
+      position:fixed; inset:0; background:#0008; display:none; align-items:center; justify-content:center;
+    }
+    .card{
+      width:min(820px, 92vw); background:#fff7e9; border-radius:22px;
+      border:6px solid #fff; outline:4px solid #222; padding:18px 22px 24px;
+      box-shadow: 0 18px 40px #00000050; position:relative;
+    }
+    .closeX{
+      position:absolute; right:8px; top:6px; width:34px; height:34px; border-radius:50%;
+      background:#fff; border:2px solid #222; display:grid; place-items:center; cursor:pointer; font-weight:800;
+    }
+    .post{
+      display:grid; grid-template-columns: 1fr 1fr; gap:16px; align-items:stretch;
+      min-height: 360px;
+    }
+    .post .leftSticker{
+      background:#ffe6ea;
+      border-radius:16px; border:3px solid #222;
+      display:grid; place-items:center; padding:12px;
+      background-image: radial-gradient(#ffced9 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+    .post .leftSticker .big-emoji{ font-size:120px }
+    .post .rightMsg{
+      border-left:3px solid #222; padding:8px 8px 8px 18px; position:relative; font-family:'Nunito', system-ui;
+    }
+    .post h3{
+      margin:6px 0 12px; font-family:'Baloo 2'; font-size:28px;
+    }
+    .post p{ margin:0; font-size:18px; line-height:1.55 }
+    .post .corner{
+      position:absolute; right:-8px; top:-8px; font-size:42px;
+      transform:rotate(10deg)
+    }
+
+    /* Tiny credit (optional – remove if you don't want it) */
+    .credit{
+      position:fixed; bottom:8px; left:50%; transform:translateX(-50%);
+      font-size:12px; opacity:.7; font-family:'Nunito';
+    }
+
+    @media (max-width:900px){
+      .post{ grid-template-columns:1fr }
+      .post .rightMsg{ border-left:none; border-top:3px solid #222; padding-top:14px }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+
+  <!-- Top & bottom bunting ribbons -->
+  <div class="bunting">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,40 Q300,100 600,40 T1200,40" fill="none" stroke="#ff5a71" stroke-width="8"/>
+      <!-- triangles -->
+      <g id="flags">
+        <!-- repeated flags -->
+        <g>
+          <polygon points="40,40 80,40 60,90" fill="#ff5a71" stroke="#000" stroke-width="3"/>
+          <polygon points="100,40 140,40 120,90" fill="#ffd4db" stroke="#000" stroke-width="3"/>
+          <polygon points="160,40 200,40 180,90" fill="#ff5a71" stroke="#000" stroke-width="3"/>
+        </g>
+      </g>
+      <use href="#flags" x="0"/><use href="#flags" x="240"/><use href="#flags" x="480"/><use href="#flags" x="720"/><use href="#flags" x="960"/>
+    </svg>
+  </div>
+  <div class="bunting bottom">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,40 Q300,100 600,40 T1200,40" fill="none" stroke="#ff5a71" stroke-width="8"/>
+      <use href="#flags" x="0"/><use href="#flags" x="240"/><use href="#flags" x="480"/><use href="#flags" x="720"/><use href="#flags" x="960"/>
+    </svg>
+  </div>
+
+  <div class="stage">
+    <!-- LEFT -->
+    <div class="left">
+      <div class="title">
+        <div class="word" id="happy">
+          <span class="cap">Happy</span>
+          <span class="party" aria-hidden="true"></span>
+        </div>
+        <div class="word big" id="birthday">Birthday</div>
+      </div>
+
+      <div class="pill" id="dob">
+        <span class="star">★</span>
+        <span class="dateText">5 April 1996</span>
+        <span class="star">★</span>
+      </div>
+
+      <div class="pill cta small" id="openCard">
+        Click here <span class="bestieFirst">Bestie</span> 💌
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+      <div class="avatar" id="avatar">
+        <img src="bestie.jpg" alt="Bestie" style="width:100%;height:100%;object-fit:cover">
+      </div>
+      <div class="nameTag" id="nameTag">😊 <span class="bestieName">Rashmiii</span> <span>♥</span></div>
+    </div>
+  </div>
+
+  <!-- Floating hearts / balloons / stars get injected here -->
+  <div class="float-layer" id="floatLayer"></div>
+
+  <!-- Popup -->
+  <div class="modalBack" id="modal">
+    <div class="card" role="dialog" aria-modal="true">
+      <div class="closeX" id="closeX">✕</div>
+      <div class="post">
+        <div class="leftSticker">
+          <div class="big-emoji">🐰❤️</div>
+        </div>
+        <div class="rightMsg">
+          <h3>To you <span>💖</span></h3>
+          <p id="messageText">
+            My love, you are a very special girl. I silently thank you for coming into my life.
+            Today, I wish you all the best, lots of health, and lots of joy. I hope we’ll celebrate
+            many more birthdays like this together. Happy birthday to you. <span>💕</span>
+          </p>
+          <div class="corner">🐱</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="credit">Made with ❤️ in VS Code</div>
+
+<script>
+  // ======= CONFIG (edit these) =======
+  const CONFIG = {
+    bestieName: "Rashmiii",          // TODO: her display name
+    bestieFirst: "Rashmi",           // TODO: short name for the button
+    birthdayText: "5 April 1996",    // TODO: date line
+    photoPath: "bestie.jpg",         // TODO: file name of the photo (same folder as index.html)
+    popupMessage: `My love, you are a very special girl. I silently thank you for coming into my life. 
+Today, I wish you all the best, lots of health, and lots of joy. I hope we’ll celebrate many more birthdays like this together. 
+Happy birthday to you. I love you. ❤️`, // TODO: your message
+    floatCount: 26,                   // how many floating items
+    duration: 1.2                     // base timing scale (lower = faster)
+  };
+
+  // apply config text & image
+  document.querySelectorAll(".bestieName").forEach(el => el.textContent = CONFIG.bestieName);
+  document.querySelectorAll(".bestieFirst").forEach(el => el.textContent = CONFIG.bestieFirst);
+  document.querySelector(".dateText").textContent = CONFIG.birthdayText;
+  document.querySelector("#avatar img").src = CONFIG.photoPath;
+  document.getElementById("messageText").textContent = CONFIG.popupMessage;
+
+  // ======= Entrance animation timeline =======
+  const tl = gsap.timeline({ defaults:{ ease:"back.out(1.8)" } });
+
+  tl.from("#happy", { y:120, opacity:0, duration:0.9*CONFIG.duration })
+    .from("#birthday", { y:140, opacity:0, duration:1.0*CONFIG.duration }, "-=0.5")
+    .from("#dob", { y:80, opacity:0, duration:0.7*CONFIG.duration }, "-=0.4")
+    .from("#avatar", { x:200, scale:0.6, opacity:0, duration:0.9*CONFIG.duration }, "-=0.6")
+    .from("#nameTag", { y:40, opacity:0, duration:0.6*CONFIG.duration }, "-=0.5")
+    .from("#openCard", { y:40, opacity:0, duration:0.6*CONFIG.duration }, "-=0.5");
+
+  // subtle bobbing to keep it lively
+  gsap.to("#avatar", { y:6, duration:2.5, yoyo:true, repeat:-1, ease:"sine.inOut" });
+  gsap.to("#nameTag", { y:3, duration:2, yoyo:true, repeat:-1, ease:"sine.inOut" });
+
+  // ======= Floating confetti / balloons / hearts / stars =======
+  const floatLayer = document.getElementById("floatLayer");
+  const EMOJIS = ["⭐","✨","💖","💗","💞","💫"];
+  for (let i=0;i<CONFIG.floatCount;i++){
+    const kind = Math.random();
+    const el = document.createElement("div");
+    el.classList.add("float");
+    if (kind < 0.35){
+      el.classList.add("balloon");
+    } else if (kind < 0.7){
+      el.classList.add("heart"); el.textContent = EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
+    } else {
+      el.classList.add("star"); el.textContent = "★";
+    }
+    const left = Math.random()*100;
+    const size = 0.8 + Math.random()*1.2;
+    el.style.left = left + "vw";
+    el.style.transform = `scale(${size})`;
+    floatLayer.appendChild(el);
+
+    // start below screen, float up, then recycle
+    const dur = 10 + Math.random()*10;
+    gsap.fromTo(el, { y: window.innerHeight + 50, opacity:0.0 },
+      { y: -120, opacity:0.9, duration: dur, delay: Math.random()*5,
+        ease:"sine.inOut", repeat:-1, onRepeat(){
+          // randomize horizontal drift each loop
+          gsap.to(el, { x: (Math.random()*2-1)*80, duration: dur, ease:"sine.inOut" })
+        }});
+  }
+
+  // ======= Popup interactions =======
+  const openCard = document.getElementById("openCard");
+  const modal = document.getElementById("modal");
+  const closeX = document.getElementById("closeX");
+
+  function openModal(){
+    modal.style.display = "flex";
+    gsap.fromTo(".card", { scale:.85, opacity:0 }, { scale:1, opacity:1, duration:.35, ease:"back.out(1.8)" });
+  }
+  function closeModal(){
+    gsap.to(".card", { scale:.9, opacity:0, duration:.25, onComplete: ()=> modal.style.display="none" });
+  }
+  openCard.addEventListener("click", openModal);
+  closeX.addEventListener("click", closeModal);
+  modal.addEventListener("click", (e)=>{ if(e.target===modal) closeModal(); });
+
+  // Optional: auto-open after a few seconds if you want it in the video
+  // setTimeout(openModal, 5500);
+</script>
+</body>
+</html>
