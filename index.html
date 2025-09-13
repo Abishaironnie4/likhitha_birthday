@@ -1,277 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Happy Birthday</title>
 
+<!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
 
 <style>
   :root{
-    --bg:#ffe9ee;         /* soft pink */
-    --grid:#ffdbe3;
-    --ink:#111;
-    --pill:#ff5a71;
-    --pill-d:#db4257;
-    --ring:#0d0d0d;
-    --white:#fff;
-    --shadow:0 10px 0 #00000020;
-    --shadow-lg:0 16px 0 #00000020;
-    --soft:0 20px 40px #00000018;
-    --gold:#ffd166;
+    --bg:#ffe9ee; --grid:#ffdbe3; --ink:#111;
+    --pill:#ff5a71; --pill-d:#db4257; --ring:#0d0d0d; --white:#fff;
   }
-
   *{box-sizing:border-box}
   html,body{height:100%;margin:0}
-  body{
-    background:var(--bg);
-    font-family:'Baloo 2', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-    color:#222;
-    overflow:hidden;
-  }
+  body{background:var(--bg);font-family:'Baloo 2',system-ui;color:#222;overflow:hidden}
 
-  /* Background grid */
-  .grid{
-    position:fixed; inset:0; pointer-events:none;
-    background:
-      linear-gradient(to right, var(--grid) 1px, transparent 1px) 0 0/40px 40px,
-      linear-gradient(to bottom, var(--grid) 1px, transparent 1px) 0 0/40px 40px;
-    opacity:.75;
-  }
+  /* PINK GRID */
+  .grid{position:fixed;inset:0;pointer-events:none;
+    background:linear-gradient(to right,var(--grid)1px,transparent 1px) 0 0/40px 40px,
+               linear-gradient(to bottom,var(--grid)1px,transparent 1px) 0 0/40px 40px;opacity:.75}
 
-  /* Curved bunting with shaded flags + string */
-  .bunting{position:fixed; left:0; right:0; top:0; height:130px; pointer-events:none; z-index:2}
-  .bunting svg{width:100%; height:100%}
-  .bunting .string{fill:none; stroke:#ff6e86; stroke-width:8; stroke-linecap:round; filter:drop-shadow(0 4px 0 #ffb4c1)}
-  .bunting .flag{
-    stroke: #111; stroke-width:3; filter: drop-shadow(0 2px 0 #00000025);
-  }
+  /* CURVED BUNTING (no inline JS) */
+  .bunting{position:fixed;left:0;right:0;top:0;height:120px;pointer-events:none;z-index:2}
+  .bunting svg{width:100%;height:100%}
+  .bunting .string{fill:none;stroke:#ff6e86;stroke-width:8;stroke-linecap:round;filter:drop-shadow(0 4px 0 #ffb4c1)}
+  .bunting .flag{stroke:#111;stroke-width:3;filter:drop-shadow(0 2px 0 #0004)}
 
-  /* Stage */
-  .stage{position:relative; width:min(1200px,100vw); height:min(680px,56.25vw); margin:clamp(8px,3vh,24px) auto 0}
-  .left{position:absolute; left:5%; top:10%; display:flex; flex-direction:column; gap:18px}
-  .right{position:absolute; right:6%; top:12%}
+  /* Layout – CENTERED vertically */
+  .wrap{position:relative;height:100%;display:flex;align-items:center;justify-content:center}
+  .stage{position:relative;width:min(1200px,100vw);height:min(680px,56.25vw)}
 
-  /* Title: letter tiles (Happy) + coral letters (Birthday) */
-  .letters{display:flex; gap:8px; align-items:flex-end; flex-wrap:wrap}
-  .tile{
-    display:inline-grid; place-items:center;
-    min-width:64px; padding:6px 14px;
-    background:linear-gradient(#fff,#f6f8ff);
-    border:4px solid #111; border-radius:14px;
-    box-shadow:var(--shadow);
-    font-size: clamp(40px,7vw,96px); line-height:1; font-weight:800; color:#111;
-    transform: translateY(40px); opacity:0;
-  }
-  .coral{
-    display:inline-block; padding:2px 4px;
-    font-size: clamp(40px,7vw,96px); font-weight:800; color:#ff5a71;
-    -webkit-text-stroke:3px #111; text-stroke:3px #111;
-    filter: drop-shadow(0 6px 0 #00000018);
-    transform: translateY(40px); opacity:0;
-  }
+  .left{position:absolute;left:5%;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px}
+  .right{position:absolute;right:6%;top:50%;transform:translateY(-50%)}
 
-  /* Party hat: real cone via SVG; sits on Y and slides subtly */
-  .hat{
-    position:absolute; width: clamp(28px, 4vw, 52px); height: clamp(28px, 4vw, 52px);
-    left:58%; top: -16%;
-    transform-origin: 30% 90%;
-    animation: hatSlide 2.6s ease-in-out infinite;
-  }
-  @keyframes hatSlide{
-    0%,100%{ transform: translateX(-6px) rotate(10deg)}
-    50%{ transform: translateX(4px) rotate(16deg)}
-  }
+  /* Title */
+  .row{display:flex;gap:4px;align-items:flex-end;flex-wrap:wrap}
+  .tile{display:grid;place-items:center;min-width:58px;padding:4px 10px;background:linear-gradient(#fff,#f6f8ff);
+        border:4px solid #111;border-radius:14px;box-shadow:0 8px 0 #0002;font-size:clamp(36px,6.6vw,92px);
+        line-height:1;font-weight:800;color:#111;transform:translateY(40px);opacity:0;letter-spacing:-0.02em}
+  .coral{display:inline-block;font-size:clamp(36px,6.6vw,92px);font-weight:800;color:#ff5a71;
+        -webkit-text-stroke:3px #111; /* keep webkit only */
+        filter:drop-shadow(0 6px 0 #0002);
+        transform:translateY(40px);opacity:0;letter-spacing:-0.03em}
+
+  /* Hat on Y of Happy (real cone) */
+  .hat{position:absolute;width:clamp(26px,4vw,48px);height:clamp(26px,4vw,48px);left:58%;top:-18%;
+       transform-origin:30% 90%;animation:hatSlide 2.6s ease-in-out infinite}
+  @keyframes hatSlide{0%,100%{transform:translateX(-6px) rotate(10deg)}50%{transform:translateX(4px) rotate(16deg)}}
 
   /* Button */
-  .pill{
-    display:inline-flex; align-items:center; gap:10px;
-    padding:14px 26px; border-radius:999px; background:var(--pill); color:#111;
-    border:3px solid #111; box-shadow:var(--shadow), inset 0 -5px 0 var(--pill-d);
-    font-family:'Nunito'; font-weight:900; cursor:pointer; user-select:none;
-  }
+  .pill{display:inline-flex;align-items:center;gap:10px;padding:14px 26px;border-radius:999px;background:var(--pill);color:#111;
+        border:3px solid #111;box-shadow:0 8px 0 #0002,inset 0 -5px 0 var(--pill-d);font-family:'Nunito';font-weight:900;cursor:pointer}
 
-  /* Avatar */
-  .avatar{
-    width: clamp(260px, 36vw, 380px); height: clamp(260px, 36vw, 380px);
-    border-radius:50%; overflow:hidden; background:#ddd center/cover no-repeat;
-    border:8px solid var(--ring);
-    box-shadow: var(--soft), 0 0 0 10px #0000000a inset;
-    transform: scale(.86); opacity:0;
-  }
-  .nameTag{
-    position:absolute; bottom:-38px; left:50%; transform:translateX(-50%);
-    padding:10px 22px; border-radius:999px; background:var(--pill); color:#111;
-    border:3px solid #111; font-family:'Nunito'; font-weight:900;
-    box-shadow:var(--shadow), inset 0 -5px 0 var(--pill-d); opacity:0;
-  }
+  /* Avatar + name */
+  .avatar{width:clamp(250px,34vw,360px);height:clamp(250px,34vw,360px);border-radius:50%;overflow:hidden;background:#ddd center/cover no-repeat;
+          border:8px solid var(--ring);box-shadow:0 18px 40px #0002,0 0 0 10px #0000000a inset;transform:scale(.86);opacity:0}
+  .nameTag{position:absolute;bottom:-34px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:999px;background:var(--pill);color:#111;
+           border:3px solid #111;font-family:'Nunito';font-weight:900;box-shadow:0 8px 0 #0002,inset 0 -5px 0 var(--pill-d);opacity:0}
 
-  /* Sparkles (blink) */
-  .sparkle{position:fixed; pointer-events:none; font-size:26px; opacity:0;
-    text-shadow:0 0 10px #fff6, 0 0 18px #ffd7; z-index:1}
+  /* Glittering background */
+  .sparkle{position:fixed;pointer-events:none;font-size:26px;opacity:0;text-shadow:0 0 10px #fff6,0 0 18px #ffd7;z-index:1}
 
-  /* Modal */
-  .modalBack{position:fixed; inset:0; background:#0005; display:none; align-items:center; justify-content:center; z-index:10}
-  .card{width:min(860px,92vw); background:var(--panel,#fff7e9); color:#222; border-radius:22px; box-shadow:var(--soft);
-    border:6px solid #fff; outline:4px solid #222; padding:18px 22px 24px; position:relative}
-  .closeX{position:absolute; right:8px; top:6px; width:34px; height:34px; border-radius:50%; background:#fff; border:2px solid #222; display:grid; place-items:center; font-weight:900; cursor:pointer}
-  .post{display:grid; grid-template-columns:1fr 1fr; gap:16px; min-height:360px}
-  .leftSticker{background:#ffe6ea; border:3px solid #222; border-radius:16px; display:grid; place-items:center; padding:12px;
-    background-image:radial-gradient(#ffced9 1px, transparent 1px); background-size:16px 16px}
+  /* Popup */
+  .modalBack{position:fixed;inset:0;background:#0005;display:none;align-items:center;justify-content:center;z-index:10}
+  .card{width:min(860px,92vw);background:#fff7e9;color:#222;border-radius:22px;border:6px solid #fff;outline:4px solid #222;
+        padding:18px 22px 24px;box-shadow:0 18px 40px #0003;position:relative}
+  .closeX{position:absolute;right:8px;top:6px;width:34px;height:34px;border-radius:50%;background:#fff;border:2px solid #222;display:grid;place-items:center;font-weight:900;cursor:pointer}
+  .post{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:360px}
+  .leftSticker{background:#ffe6ea;border:3px solid #222;border-radius:16px;display:grid;place-items:center;padding:12px;background-image:radial-gradient(#ffced9 1px,transparent 1px);background-size:16px 16px}
   .big-emoji{font-size:120px}
-  .rightMsg{border-left:3px solid #222; padding:8px 8px 8px 18px; font-family:'Nunito'; position:relative}
-  .rightMsg h3{margin:6px 0 12px; font-family:'Baloo 2'; font-size:28px}
-  .rightMsg p{margin:0; font-size:18px; line-height:1.55; white-space:pre-wrap}
-  @media (max-width:900px){
-    .post{grid-template-columns:1fr}
-    .rightMsg{border-left:none; border-top:3px solid #222; padding-top:14px}
-  }
+  .rightMsg{border-left:3px solid #222;padding:8px 8px 8px 18px;font-family:'Nunito';position:relative}
+  .rightMsg h3{margin:6px 0 12px;font-family:'Baloo 2';font-size:28px}
+  .rightMsg p{margin:0;font-size:18px;line-height:1.55;white-space:pre-wrap}
+  @media (max-width:900px){.post{grid-template-columns:1fr}.rightMsg{border-left:none;border-top:3px solid #222;padding-top:14px}}
 
-  /* Gate (animated gift) */
-  .gate{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:var(--bg); z-index:20}
-  .gateInner{display:flex; flex-direction:column; align-items:center; gap:14px}
-  .gift{
-    position:relative; width:160px; height:160px; cursor:pointer;
-    filter: drop-shadow(0 12px 0 #00000020);
-  }
-  .gift .box{
-    position:absolute; inset:24px 0 0 0; margin:0 8px;
-    background: linear-gradient(#ff93a6,#ff5a71); border:4px solid #111; border-top:none; border-radius:18px;
-    animation: giftPulse 2.4s ease-in-out infinite;
-  }
-  @keyframes giftPulse{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
-  .gift .ribbonV{position:absolute; top:24px; bottom:0; left:50%; width:18px; transform:translateX(-50%); background:#ffd166; border-left:4px solid #111; border-right:4px solid #111; border-radius:6px}
-  .gift .lid{
-    position:absolute; left:-6px; right:-6px; top:-6px; height:50px;
-    background:linear-gradient(#ffd166,#ffc14f); border:4px solid #111; border-radius:12px;
-    animation: lidWobble 2.2s ease-in-out infinite;
-    transform-origin: 20% 100%;
-  }
-  @keyframes lidWobble{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
-  .gift .shine{
-    position:absolute; left:0; right:0; top:24px; bottom:0; border-radius:18px;
-    background: linear-gradient(120deg, #ffffff55 0 10%, transparent 10% 60%, #ffffff25 60% 68%, transparent 68% 100%);
-    animation: sheen 2.8s linear infinite;
-  }
+  /* Gate (animated gift.jpg) */
+  .gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:20}
+  .gateInner{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .giftImg{width:180px;height:180px;border-radius:22px;border:4px solid #111;overflow:hidden;box-shadow:0 12px 0 #0002;position:relative;background:#ff9db0 center/cover no-repeat}
+  .giftImg img{width:100%;height:100%;object-fit:cover;display:block}
+  .bob{animation:bob 2.2s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+  .sheen{position:absolute;inset:0;border-radius:22px;background:linear-gradient(120deg,#ffffff66 0 10%,transparent 10% 60%,#ffffff33 60% 68%,transparent 68% 100%);mix-blend-mode:screen;animation:sheen 2.8s linear infinite}
   @keyframes sheen{0%{background-position:-200% 0}100%{background-position:200% 0}}
-  .giftSpark{position:absolute; right:-14px; top:-14px; font-size:24px; animation: twinkle 1.4s ease-in-out infinite}
-  @keyframes twinkle{0%,100%{opacity:0; transform:scale(.5) rotate(0)}50%{opacity:1; transform:scale(1) rotate(15deg)}}
 
-  .typeLabel{font-family:'Poppins',system-ui; font-weight:700; font-size:18px; background:#fff; border:3px solid #111; padding:8px 14px; border-radius:12px; box-shadow:var(--shadow)}
-  .inputWrap{display:flex; flex-direction:column; gap:10px; align-items:center}
-  .nameInput{padding:12px 14px; border-radius:12px; border:3px solid #111; font-family:'Nunito'; font-weight:800; width:min(320px,80vw); background:#fff}
-  .hint{font-family:'Poppins'; font-weight:700; font-size:16px; background:#fff; border:3px solid #111; padding:6px 12px; border-radius:12px; display:none}
-
+  .typeLabel{font-family:'Poppins',system-ui;font-weight:700;font-size:18px;background:#fff;border:3px solid #111;padding:8px 14px;border-radius:12px;box-shadow:0 8px 0 #0002}
+  .nameInput{padding:12px 14px;border-radius:12px;border:3px solid #111;font-family:'Nunito';font-weight:800;width:min(320px,80vw);background:#fff}
 </style>
 </head>
 <body>
-  <div class="grid"></div>
+<div class="grid"></div>
 
-  <!-- Bunting -->
-  <div class="bunting">
-    <svg viewBox="0 0 1200 130" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="triPink" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#ff8fa3"/>
-          <stop offset="1" stop-color="#ff5a71"/>
-        </linearGradient>
-        <filter id="flagShadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="2" stdDeviation="0.5" flood-color="#000" flood-opacity="0.25"/>
-        </filter>
-      </defs>
-      <path class="string" d="M0,42 Q300,100 600,42 T1200,42"/>
-      <!-- Triangles distributed -->
-      <g filter="url(#flagShadow)">
-        <!-- left pack -->
-        <g>
-          <polygon class="flag" fill="url(#triPink)" points="80,42 112,42 96,86"/>
-          <polygon class="flag" fill="#ffd4db" points="128,42 160,42 144,86"/>
-          <polygon class="flag" fill="url(#triPink)" points="176,42 208,42 192,86"/>
-          <polygon class="flag" fill="#ffd4db" points="224,42 256,42 240,86"/>
-        </g>
-        <!-- clones across -->
-        <use href="#f" />
-        <g transform="translate(280,0)">
-          <polygon class="flag" fill="url(#triPink)" points="80,42 112,42 96,86"/>
-          <polygon class="flag" fill="#ffd4db" points="128,42 160,42 144,86"/>
-          <polygon class="flag" fill="url(#triPink)" points="176,42 208,42 192,86"/>
-          <polygon class="flag" fill="#ffd4db" points="224,42 256,42 240,86"/>
-        </g>
-        <g transform="translate(560,0)">
-          <polygon class="flag" fill="url(#triPink)" points="80,42 112,42 96,86"/>
-          <polygon class="flag" fill="#ffd4db" points="128,42 160,42 144,86"/>
-          <polygon class="flag" fill="url(#triPink)" points="176,42 208,42 192,86"/>
-          <polygon class="flag" fill="#ffd4db" points="224,42 256,42 240,86"/>
-        </g>
-        <g transform="translate(840,0)">
-          <polygon class="flag" fill="url(#triPink)" points="80,42 112,42 96,86"/>
-          <polygon class="flag" fill="#ffd4db" points="128,42 160,42 144,86"/>
-          <polygon class="flag" fill="url(#triPink)" points="176,42 208,42 192,86"/>
-          <polygon class="flag" fill="#ffd4db" points="224,42 256,42 240,86"/>
-        </g>
+<!-- BUNTING -->
+<div class="bunting">
+  <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="triPink" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ff8fa3"/><stop offset="1" stop-color="#ff5a71"/>
+      </linearGradient>
+      <g id="flagpair">
+        <polygon class="flag" fill="url(#triPink)" points="0,42 32,42 16,86"/>
+        <polygon class="flag" fill="#ffd4db"    points="34,42 66,42 50,86"/>
       </g>
-    </svg>
-  </div>
+    </defs>
+    <path class="string" d="M0,42 Q300,100 600,42 T1200,42"/>
+    <!-- tightly spaced pairs along the curve -->
+    <use href="#flagpair" x="20"/><use href="#flagpair" x="85"/><use href="#flagpair" x="150"/>
+    <use href="#flagpair" x="215"/><use href="#flagpair" x="280"/><use href="#flagpair" x="345"/>
+    <use href="#flagpair" x="410"/><use href="#flagpair" x="475"/><use href="#flagpair" x="540"/>
+    <use href="#flagpair" x="605"/><use href="#flagpair" x="670"/><use href="#flagpair" x="735"/>
+    <use href="#flagpair" x="800"/><use href="#flagpair" x="865"/><use href="#flagpair" x="930"/>
+    <use href="#flagpair" x="995"/><use href="#flagpair" x="1060"/><use href="#flagpair" x="1125"/>
+  </svg>
+</div>
 
-  <!-- Gate -->
-  <div class="gate" id="gate">
-    <div class="gateInner">
-      <div class="gift" id="gift">
-        <div class="lid"></div>
-        <div class="box"></div>
-        <div class="ribbonV"></div>
-        <div class="shine"></div>
-        <div class="giftSpark">✨</div>
-      </div>
-
-      <!-- live-typing label -->
-      <div class="typeLabel" id="typeLabel"></div>
-      <div class="inputWrap">
-        <input class="nameInput" id="nameInput" placeholder="Type here…" />
-        <div class="hint" id="hint"></div>
-      </div>
+<!-- GATE -->
+<div class="gate" id="gate">
+  <div class="gateInner">
+    <div class="giftImg bob" id="giftBox">
+      <img src="gift.jpg?v=1" alt="gift">
+      <div class="sheen"></div>
     </div>
+    <div class="typeLabel" id="typeLabel"></div>
+    <input class="nameInput" id="nameInput" placeholder="Type here…" />
   </div>
+</div>
 
-  <!-- Scene -->
+<!-- MAIN -->
+<div class="wrap">
   <div class="stage" id="scene" style="visibility:hidden">
     <div class="left">
-      <div class="letters" id="rowHappy"></div>
-      <div class="letters" id="rowBirth"></div>
+      <div class="row" id="rowHappy"></div>
+      <div class="row" id="rowBirth"></div>
       <div class="pill" id="openCard">Click here <span class="bestieFirst">Likki Bondam</span> 💌</div>
     </div>
-
     <div class="right">
-      <div class="avatar" id="avatar"><img src="bestie.jpg" alt="photo" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="avatar" id="avatar"><img src="bestie.jpg" alt="" style="width:100%;height:100%;object-fit:cover"></div>
       <div class="nameTag" id="nameTag"><span class="bestieName">Likhitha</span> ♥</div>
     </div>
   </div>
+</div>
 
-  <!-- sparkles -->
-  <div id="sparkLayer"></div>
+<!-- glittering bg -->
+<div id="sparkLayer"></div>
 
-  <!-- Popup -->
-  <div class="modalBack" id="modal">
-    <div class="card" role="dialog" aria-modal="true">
-      <button class="closeX" id="closeX">✕</button>
-      <div class="post">
-        <div class="leftSticker"><div class="big-emoji">🐰❤️</div></div>
-        <div class="rightMsg">
-          <h3 id="typeTitle"></h3>
-          <p id="typeBody"></p>
-        </div>
+<!-- POPUP -->
+<div class="modalBack" id="modal">
+  <div class="card" role="dialog" aria-modal="true">
+    <button class="closeX" id="closeX">✕</button>
+    <div class="post">
+      <div class="leftSticker"><div class="big-emoji">🐰❤️</div></div>
+      <div class="rightMsg">
+        <h3 id="typeTitle"></h3>
+        <p id="typeBody"></p>
       </div>
     </div>
   </div>
+</div>
 
 <script>
-/* ===== CONFIG (edit me) ===== */
+/* ===== CONFIG ===== */
 const CONFIG = {
   bestieName: "Likhitha",
   buttonName: "Likki Bondam",
-  photoPath: "bestie.jpg?v=5",
-  unlockWord: "bondam",
+  photoPath: "bestie.jpg?v=6",
+  giftPath: "gift.jpg?v=1",
+  unlockWord: "bondam", // case-insensitive
   happy: "Happy",
   birthday: "Birthday",
   typeTitle: "To you 💖",
@@ -279,161 +175,137 @@ const CONFIG = {
 `My love, you are a very special girl. I silently thank you for coming into my life.
 Today, I wish you all the best, lots of health, and lots of joy. I hope we’ll celebrate many more birthdays like this together.
 Happy birthday to you. I love you. 💗`,
-  sparklesPerSecond: 11,
-  sparkSet: ["✨","🌟","💖","💫","🪄","⭐"]
+  sparklesPerSecond: 14,
+  sparkSet: ["✨","🌟","💖","💫","🪄","⭐","🎈","🍬","💗","🎀","🎉"]
 };
 
 /* ===== helper: typewriter ===== */
-function typewrite(el, text, speed=30, done){
-  el.textContent=''; let i=0;
-  const t=setInterval(()=>{
-    el.textContent += text[i++] || '';
-    if(i>text.length){ clearInterval(t); done&&done(); }
-  }, speed);
-}
+function typewrite(el, text, speed=28, done){ el.textContent=''; let i=0;
+  const t=setInterval(()=>{ el.textContent+= text[i++] || ''; if(i>text.length){clearInterval(t); done&&done();}}, speed);}
 
-/* ===== Gate (gift + name) ===== */
-const gate=document.getElementById('gate');
-const typeLabel=document.getElementById('typeLabel');
-const nameInput=document.getElementById('nameInput');
-const hint=document.getElementById('hint');
-let wrong=0;
+/* ===== Gate logic ===== */
+const gate = document.getElementById('gate');
+const typeLabel = document.getElementById('typeLabel');
+const nameInput = document.getElementById('nameInput');
 
-// animate label on load
-typewrite(typeLabel, "Open it 🎁  •  Enter your name", 25);
+// show typing label
+typewrite(typeLabel, "Open it 🎁  •  Enter your name", 22);
 
-document.getElementById('gift').addEventListener('click', ()=>{
-  nameInput.focus();
-});
-
+// submit on Enter
+let wrong = 0;
 nameInput.addEventListener('keydown', (e)=>{
   if(e.key!=="Enter") return;
-  const v=(nameInput.value||'').trim().toLowerCase();
-  if(v===CONFIG.unlockWord.toLowerCase()){
-    // unlock
-    gate.style.transition="opacity .4s ease";
-    gate.style.opacity=0;
-    setTimeout(()=>{ gate.style.display="none"; startScene(); }, 400);
+  const v = (nameInput.value||'').trim().toLowerCase();
+  if(v === CONFIG.unlockWord.toLowerCase()){
+    gate.style.transition="opacity .45s ease"; gate.style.opacity=0;
+    setTimeout(()=>{ gate.style.display="none"; startScene(); }, 450);
   }else{
     wrong++;
-    // change top copy to Telugu hints
-    typeLabel.textContent='';
-    if(wrong===1) typeLabel.textContent="ehe ne name kadhu  nen pettindi";
-    else typeLabel.textContent="hehe oorike cheppa le.. nen pettindi kadhu nuv nannu pilchedhi";
-    hint.style.display="none";
+    typeLabel.textContent = wrong===1 ? "ehe ne name kadhu  nen pettindi"
+                                      : "hehe oorike cheppa le.. nen pettindi kadhu nuv nannu pilchedhi";
     nameInput.select();
   }
 });
 
-/* ===== Scene build ===== */
-const rowHappy=document.getElementById('rowHappy');
-const rowBirth=document.getElementById('rowBirth');
+/* ===== Build title letters ===== */
+const rowHappy = document.getElementById('rowHappy');
+const rowBirth = document.getElementById('rowBirth');
 
 function buildWord(container, word, style){
   container.innerHTML='';
   [...word].forEach(ch=>{
     const span=document.createElement('span');
     span.className=style;
-    span.textContent=ch===' ' ? '\u00A0' : ch;
+    span.textContent= ch===' ' ? '\u00A0' : ch;
     container.appendChild(span);
   });
 }
 
-function animateWord(container, attachHat=false){
+function animateWord(container, placeHatOnY=false){
   const letters=[...container.children];
   letters.forEach((el,i)=>{
     setTimeout(()=>{
       el.style.transition="transform .55s cubic-bezier(.17,.67,.27,1.35), opacity .5s";
-      el.style.transform="translateY(0)";
-      el.style.opacity="1";
-      setTimeout(()=>{ el.style.transform="translateY(-6px)"; }, 520);
-      setTimeout(()=>{ el.style.transform="translateY(0)"; }, 740);
+      el.style.transform="translateY(0)"; el.style.opacity=1;
+      setTimeout(()=>el.style.transform="translateY(-6px)",520);
+      setTimeout(()=>el.style.transform="translateY(0)",740);
 
-      if(attachHat && el.textContent.toLowerCase()==='y'){
-        // SVG cone hat positioned on Y
+      if(placeHatOnY && el.textContent.toLowerCase()==='y'){
+        // SVG cone hat
         const hat=document.createElementNS("http://www.w3.org/2000/svg","svg");
-        hat.setAttribute("viewBox","0 0 100 100");
-        hat.classList.add("hat");
-        hat.innerHTML=`
-          <defs>
+        hat.setAttribute("viewBox","0 0 100 100"); hat.classList.add("hat");
+        hat.innerHTML=`<defs>
             <linearGradient id="cone" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0" stop-color="#0b2a4a"/><stop offset="1" stop-color="#ff5a71"/>
             </linearGradient>
             <filter id="hshadow"><feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#000" flood-opacity=".35"/></filter>
           </defs>
           <polygon points="50,6 92,92 8,92" fill="url(#cone)" stroke="#111" stroke-width="6" filter="url(#hshadow)"/>
-          <circle cx="92" cy="8" r="10" fill="#111"/>
-        `;
-        el.style.position='relative';
-        el.appendChild(hat);
+          <circle cx="92" cy="8" r="10" fill="#111"/>`;
+        el.style.position='relative'; el.appendChild(hat);
       }
-    }, 120*i);
+    }, 110*i);
   });
 }
 
-const avatar=document.getElementById('avatar');
-const nameTag=document.getElementById('nameTag');
+/* ===== Avatar + name ===== */
+const avatar = document.getElementById('avatar');
+const nameTag = document.getElementById('nameTag');
 
-function startScene(){
-  // text
-  buildWord(rowHappy, CONFIG.happy, 'tile');
-  buildWord(rowBirth, CONFIG.birthday, 'coral');
-
-  // personal
-  document.querySelector('.bestieName').textContent=CONFIG.bestieName;
-  document.querySelector('.bestieFirst').textContent=CONFIG.buttonName;
-  avatar.querySelector('img').src = CONFIG.photoPath;
-
-  document.getElementById('scene').style.visibility='visible';
-
-  animateWord(rowHappy,false);
-  setTimeout(()=>animateWord(rowBirth,true), 120*CONFIG.happy.length + 250);
-
-  // avatar fade
-  setTimeout(()=>{
-    avatar.style.transition="transform 1s ease, opacity 1s ease";
-    nameTag.style.transition="opacity .8s ease .3s";
-    avatar.style.transform="scale(1)";
-    avatar.style.opacity=1;
-    nameTag.style.opacity=1;
-  }, 120*CONFIG.birthday.length + 700);
-
-  // sparkles loop
-  sparkleTimer = setInterval(sparkle, 1000/CONFIG.sparklesPerSecond);
-}
-
-/* ===== Sparkles ===== */
-const sparkLayer=document.getElementById('sparkLayer');
-let sparkleTimer;
+/* ===== Sparkles / hearts / balloons / candies ===== */
+const sparkLayer = document.getElementById('sparkLayer');
 function sparkle(){
-  const s=document.createElement('div');
-  s.className='sparkle';
+  const s=document.createElement('div'); s.className='sparkle';
   s.textContent=CONFIG.sparkSet[Math.floor(Math.random()*CONFIG.sparkSet.length)];
   s.style.left=Math.random()*innerWidth+'px';
   s.style.top=Math.random()*innerHeight+'px';
   s.style.transform=`scale(${0.6+Math.random()*1.2}) rotate(${Math.random()*40-20}deg)`;
   sparkLayer.appendChild(s);
-  requestAnimationFrame(()=> s.style.transition='opacity .18s ease');
+  requestAnimationFrame(()=> s.style.transition='opacity .16s ease');
   s.style.opacity=1;
-  setTimeout(()=> s.style.opacity=0, 380+Math.random()*420);
+  setTimeout(()=> s.style.opacity=0, 360+Math.random()*480);
   setTimeout(()=> s.remove(), 1100);
 }
+let sparkTimer;
 
-/* ===== Popup typewriter ===== */
-const modal=document.getElementById('modal');
-const openCard=document.getElementById('openCard');
-const closeX=document.getElementById('closeX');
-const typeTitle=document.getElementById('typeTitle');
-const typeBody=document.getElementById('typeBody');
+/* ===== Start scene ===== */
+function startScene(){
+  // text
+  buildWord(rowHappy, CONFIG.happy, 'tile');
+  buildWord(rowBirth, CONFIG.birthday, 'coral');
+
+  // content
+  document.querySelector('.bestieName').textContent = CONFIG.bestieName;
+  document.querySelector('.bestieFirst').textContent = CONFIG.buttonName;
+  avatar.querySelector('img').src = CONFIG.photoPath;
+
+  document.getElementById('scene').style.visibility='visible';
+
+  animateWord(rowHappy, true); // hat on Y (Happy)
+  setTimeout(()=>animateWord(rowBirth,false), 110*CONFIG.happy.length + 240);
+
+  // avatar reveal
+  setTimeout(()=>{
+    avatar.style.transition="transform 1s ease, opacity 1s ease";
+    nameTag.style.transition="opacity .8s ease .3s";
+    avatar.style.transform="scale(1)"; avatar.style.opacity=1; nameTag.style.opacity=1;
+  }, 110*(CONFIG.happy.length+CONFIG.birthday.length) + 700);
+
+  // glittering background
+  sparkTimer = setInterval(sparkle, 1000/CONFIG.sparklesPerSecond);
+}
+
+/* ===== Popup typing ===== */
+const modal=document.getElementById('modal'); const openCard=document.getElementById('openCard');
+const closeX=document.getElementById('closeX'); const typeTitle=document.getElementById('typeTitle'); const typeBody=document.getElementById('typeBody');
 
 openCard.addEventListener('click', ()=>{
   modal.style.display='flex';
   typewrite(typeTitle, CONFIG.typeTitle, 42, ()=> typewrite(typeBody, CONFIG.typeBody, 18));
 });
 closeX.addEventListener('click', ()=> modal.style.display='none');
-modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.style.display='none'; });
-document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.style.display==='flex') modal.style.display='none'; });
-
+modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.style.display='none';});
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && modal.style.display==='flex') modal.style.display='none';});
 </script>
 </body>
 </html>
