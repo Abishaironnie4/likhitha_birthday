@@ -6,7 +6,7 @@
 <title>Happy Birthday</title>
 
 <!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@700;800&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@700;800&family=Poppins:wght@600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
   :root{
@@ -22,7 +22,7 @@
     background:linear-gradient(to right,var(--grid)1px,transparent 1px) 0 0/40px 40px,
                linear-gradient(to bottom,var(--grid)1px,transparent 1px) 0 0/40px 40px;opacity:.75}
 
-  /* CURVED BUNTING (no inline JS) */
+  /* CURVED BUNTING – split into two arcs with a middle gap */
   .bunting{position:fixed;left:0;right:0;top:0;height:120px;pointer-events:none;z-index:2}
   .bunting svg{width:100%;height:100%}
   .bunting .string{fill:none;stroke:#ff6e86;stroke-width:8;stroke-linecap:round;filter:drop-shadow(0 4px 0 #ffb4c1)}
@@ -41,12 +41,12 @@
         border:4px solid #111;border-radius:14px;box-shadow:0 8px 0 #0002;font-size:clamp(36px,6.6vw,92px);
         line-height:1;font-weight:800;color:#111;transform:translateY(40px);opacity:0;letter-spacing:-0.02em}
   .coral{display:inline-block;font-size:clamp(36px,6.6vw,92px);font-weight:800;color:#ff5a71;
-        -webkit-text-stroke:3px #111; /* keep webkit only */
+        -webkit-text-stroke:3px #111;
         filter:drop-shadow(0 6px 0 #0002);
         transform:translateY(40px);opacity:0;letter-spacing:-0.03em}
 
-  /* Hat on Y of Happy (real cone) */
-  .hat{position:absolute;width:clamp(26px,4vw,48px);height:clamp(26px,4vw,48px);left:58%;top:-18%;
+  /* Hat on Y of Happy (bigger cone) */
+  .hat{position:absolute;width:clamp(36px,5.6vw,72px);height:clamp(36px,5.6vw,72px);left:58%;top:-24%;
        transform-origin:30% 90%;animation:hatSlide 2.6s ease-in-out infinite}
   @keyframes hatSlide{0%,100%{transform:translateX(-6px) rotate(10deg)}50%{transform:translateX(4px) rotate(16deg)}}
 
@@ -60,11 +60,11 @@
   .nameTag{position:absolute;bottom:-34px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:999px;background:var(--pill);color:#111;
            border:3px solid #111;font-family:'Nunito';font-weight:900;box-shadow:0 8px 0 #0002,inset 0 -5px 0 var(--pill-d);opacity:0}
 
-  /* Glittering background */
-  .sparkle{position:fixed;pointer-events:none;font-size:26px;opacity:0;text-shadow:0 0 10px #fff6,0 0 18px #ffd7;z-index:1}
+  /* Glittering background (on gate + main) */
+  .sparkle{position:fixed;pointer-events:none;font-size:28px;opacity:0;text-shadow:0 0 10px #fff6,0 0 18px #ffd7;z-index:25}
 
   /* Popup */
-  .modalBack{position:fixed;inset:0;background:#0005;display:none;align-items:center;justify-content:center;z-index:10}
+  .modalBack{position:fixed;inset:0;background:#0005;display:none;align-items:center;justify-content:center;z-index:30}
   .card{width:min(860px,92vw);background:#fff7e9;color:#222;border-radius:22px;border:6px solid #fff;outline:4px solid #222;
         padding:18px 22px 24px;box-shadow:0 18px 40px #0003;position:relative}
   .closeX{position:absolute;right:8px;top:6px;width:34px;height:34px;border-radius:50%;background:#fff;border:2px solid #222;display:grid;place-items:center;font-weight:900;cursor:pointer}
@@ -74,26 +74,27 @@
   .rightMsg{border-left:3px solid #222;padding:8px 8px 8px 18px;font-family:'Nunito';position:relative}
   .rightMsg h3{margin:6px 0 12px;font-family:'Baloo 2';font-size:28px}
   .rightMsg p{margin:0;font-size:18px;line-height:1.55;white-space:pre-wrap}
-  @media (max-width:900px){.post{grid-template-columns:1fr}.rightMsg{border-left:none;border-top:3px solid #222;padding-top:14px}}
 
-  /* Gate (animated gift.jpg) */
+  /* Gate (gift.jpg as animated card) */
   .gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg);z-index:20}
-  .gateInner{display:flex;flex-direction:column;align-items:center;gap:14px}
-  .giftImg{width:180px;height:180px;border-radius:22px;border:4px solid #111;overflow:hidden;box-shadow:0 12px 0 #0002;position:relative;background:#ff9db0 center/cover no-repeat}
+  .gateInner{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .giftImg{width:220px;height:220px;border-radius:30px;overflow:hidden;position:relative;background:#ff9db0 center/cover no-repeat}
   .giftImg img{width:100%;height:100%;object-fit:cover;display:block}
   .bob{animation:bob 2.2s ease-in-out infinite}
-  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
-  .sheen{position:absolute;inset:0;border-radius:22px;background:linear-gradient(120deg,#ffffff66 0 10%,transparent 10% 60%,#ffffff33 60% 68%,transparent 68% 100%);mix-blend-mode:screen;animation:sheen 2.8s linear infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+  .sheen{position:absolute;inset:0;border-radius:30px;background:linear-gradient(120deg,#ffffff66 0 10%,transparent 10% 60%,#ffffff33 60% 68%,transparent 68% 100%);mix-blend-mode:screen;animation:sheen 2.8s linear infinite}
   @keyframes sheen{0%{background-position:-200% 0}100%{background-position:200% 0}}
 
-  .typeLabel{font-family:'Poppins',system-ui;font-weight:700;font-size:18px;background:#fff;border:3px solid #111;padding:8px 14px;border-radius:12px;box-shadow:0 8px 0 #0002}
-  .nameInput{padding:12px 14px;border-radius:12px;border:3px solid #111;font-family:'Nunito';font-weight:800;width:min(320px,80vw);background:#fff}
+  /* Cursive label (Monotype Corsiva style) */
+  .typeLabel{font-family:'Monotype Corsiva','Great Vibes','Segoe Script',cursive;font-size:28px;font-weight:700;letter-spacing:.3px;
+    background:#fff;border:3px solid #111;padding:10px 18px;border-radius:14px;box-shadow:0 8px 0 #0002}
+  .nameInput{padding:12px 14px;border-radius:12px;border:3px solid #111;font-family:'Nunito';font-weight:800;width:min(360px,80vw);background:#fff}
 </style>
 </head>
 <body>
 <div class="grid"></div>
 
-<!-- BUNTING -->
+<!-- BUNTING (two arcs with a gap in the middle) -->
 <div class="bunting">
   <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
     <defs>
@@ -105,14 +106,18 @@
         <polygon class="flag" fill="#ffd4db"    points="34,42 66,42 50,86"/>
       </g>
     </defs>
-    <path class="string" d="M0,42 Q300,100 600,42 T1200,42"/>
-    <!-- tightly spaced pairs along the curve -->
-    <use href="#flagpair" x="20"/><use href="#flagpair" x="85"/><use href="#flagpair" x="150"/>
-    <use href="#flagpair" x="215"/><use href="#flagpair" x="280"/><use href="#flagpair" x="345"/>
-    <use href="#flagpair" x="410"/><use href="#flagpair" x="475"/><use href="#flagpair" x="540"/>
-    <use href="#flagpair" x="605"/><use href="#flagpair" x="670"/><use href="#flagpair" x="735"/>
-    <use href="#flagpair" x="800"/><use href="#flagpair" x="865"/><use href="#flagpair" x="930"/>
-    <use href="#flagpair" x="995"/><use href="#flagpair" x="1060"/><use href="#flagpair" x="1125"/>
+
+    <!-- left arc -->
+    <path class="string" d="M0,52 Q260,6 520,46" />
+    <use href="#flagpair" x="10"/><use href="#flagpair" x="70"/><use href="#flagpair" x="130"/>
+    <use href="#flagpair" x="190"/><use href="#flagpair" x="250"/><use href="#flagpair" x="310"/>
+    <use href="#flagpair" x="370"/><use href="#flagpair" x="430"/><use href="#flagpair" x="490"/>
+
+    <!-- right arc (gap around the middle) -->
+    <path class="string" d="M680,46 Q940,6 1200,52" />
+    <use href="#flagpair" x="700"/><use href="#flagpair" x="760"/><use href="#flagpair" x="820"/>
+    <use href="#flagpair" x="880"/><use href="#flagpair" x="940"/><use href="#flagpair" x="1000"/>
+    <use href="#flagpair" x="1060"/><use href="#flagpair" x="1120"/><use href="#flagpair" x="1180"/>
   </svg>
 </div>
 
@@ -120,7 +125,7 @@
 <div class="gate" id="gate">
   <div class="gateInner">
     <div class="giftImg bob" id="giftBox">
-      <img src="gift.jpg?v=1" alt="gift">
+      <img src="gift.jpg?v=2" alt="gift">
       <div class="sheen"></div>
     </div>
     <div class="typeLabel" id="typeLabel"></div>
@@ -165,8 +170,8 @@
 const CONFIG = {
   bestieName: "Likhitha",
   buttonName: "Likki Bondam",
-  photoPath: "bestie.jpg?v=6",
-  giftPath: "gift.jpg?v=1",
+  photoPath: "bestie.jpg?v=7",
+  giftPath:  "gift.jpg?v=2",
   unlockWord: "bondam", // case-insensitive
   happy: "Happy",
   birthday: "Birthday",
@@ -175,23 +180,37 @@ const CONFIG = {
 `My love, you are a very special girl. I silently thank you for coming into my life.
 Today, I wish you all the best, lots of health, and lots of joy. I hope we’ll celebrate many more birthdays like this together.
 Happy birthday to you. I love you. 💗`,
-  sparklesPerSecond: 14,
-  sparkSet: ["✨","🌟","💖","💫","🪄","⭐","🎈","🍬","💗","🎀","🎉"]
+  sparklesPerSecond: 18,
+  sparkSet: ["✨","🌟","💖","💫","🪄","⭐","🎈","🍬","💗","🎀","🎉","💕","💝"]
 };
 
 /* ===== helper: typewriter ===== */
 function typewrite(el, text, speed=28, done){ el.textContent=''; let i=0;
   const t=setInterval(()=>{ el.textContent+= text[i++] || ''; if(i>text.length){clearInterval(t); done&&done();}}, speed);}
 
+/* ===== Sparkles / hearts / balloons / candies (runs from the start, also visible on gate) ===== */
+const sparkLayer = document.getElementById('sparkLayer');
+function sparkle(){
+  const s=document.createElement('div'); s.className='sparkle';
+  s.textContent=CONFIG.sparkSet[Math.floor(Math.random()*CONFIG.sparkSet.length)];
+  s.style.left=Math.random()*innerWidth+'px';
+  s.style.top=Math.random()*innerHeight+'px';
+  s.style.transform=`scale(${0.6+Math.random()*1.3}) rotate(${Math.random()*40-20}deg)`;
+  sparkLayer.appendChild(s);
+  requestAnimationFrame(()=> s.style.transition='opacity .16s ease');
+  s.style.opacity=1;
+  setTimeout(()=> s.style.opacity=0, 360+Math.random()*520);
+  setTimeout(()=> s.remove(), 1200);
+}
+setInterval(sparkle, 1000/CONFIG.sparklesPerSecond);
+
 /* ===== Gate logic ===== */
 const gate = document.getElementById('gate');
 const typeLabel = document.getElementById('typeLabel');
 const nameInput = document.getElementById('nameInput');
 
-// show typing label
 typewrite(typeLabel, "Open it 🎁  •  Enter your name", 22);
 
-// submit on Enter
 let wrong = 0;
 nameInput.addEventListener('keydown', (e)=>{
   if(e.key!=="Enter") return;
@@ -231,7 +250,7 @@ function animateWord(container, placeHatOnY=false){
       setTimeout(()=>el.style.transform="translateY(0)",740);
 
       if(placeHatOnY && el.textContent.toLowerCase()==='y'){
-        // SVG cone hat
+        // SVG cone hat (bigger)
         const hat=document.createElementNS("http://www.w3.org/2000/svg","svg");
         hat.setAttribute("viewBox","0 0 100 100"); hat.classList.add("hat");
         hat.innerHTML=`<defs>
@@ -251,22 +270,6 @@ function animateWord(container, placeHatOnY=false){
 /* ===== Avatar + name ===== */
 const avatar = document.getElementById('avatar');
 const nameTag = document.getElementById('nameTag');
-
-/* ===== Sparkles / hearts / balloons / candies ===== */
-const sparkLayer = document.getElementById('sparkLayer');
-function sparkle(){
-  const s=document.createElement('div'); s.className='sparkle';
-  s.textContent=CONFIG.sparkSet[Math.floor(Math.random()*CONFIG.sparkSet.length)];
-  s.style.left=Math.random()*innerWidth+'px';
-  s.style.top=Math.random()*innerHeight+'px';
-  s.style.transform=`scale(${0.6+Math.random()*1.2}) rotate(${Math.random()*40-20}deg)`;
-  sparkLayer.appendChild(s);
-  requestAnimationFrame(()=> s.style.transition='opacity .16s ease');
-  s.style.opacity=1;
-  setTimeout(()=> s.style.opacity=0, 360+Math.random()*480);
-  setTimeout(()=> s.remove(), 1100);
-}
-let sparkTimer;
 
 /* ===== Start scene ===== */
 function startScene(){
@@ -290,9 +293,6 @@ function startScene(){
     nameTag.style.transition="opacity .8s ease .3s";
     avatar.style.transform="scale(1)"; avatar.style.opacity=1; nameTag.style.opacity=1;
   }, 110*(CONFIG.happy.length+CONFIG.birthday.length) + 700);
-
-  // glittering background
-  sparkTimer = setInterval(sparkle, 1000/CONFIG.sparklesPerSecond);
 }
 
 /* ===== Popup typing ===== */
