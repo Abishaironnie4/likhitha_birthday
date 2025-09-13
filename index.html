@@ -1,147 +1,322 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Happy Birthday</title>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
-  <style>
-    /* --- styles (unchanged) --- */
-    :root{--bg:#ffe6ea;--grid:#fddbe0;--red:#ff5a71;--red-dark:#e04457;--ink:#1a1a1a;--bubble:#ffb3c1;--white:#fff;}
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0}
-    body{background:var(--bg);font-family:'Baloo 2',system-ui;overflow:hidden}
-    .grid{position:fixed;inset:0;pointer-events:none;background:linear-gradient(to right,var(--grid)1px,transparent 1px)0 0/40px 40px,linear-gradient(to bottom,var(--grid)1px,transparent 1px)0 0/40px 40px;opacity:.7}
-    .bunting{position:fixed;left:0;right:0;top:0;height:120px;pointer-events:none}
-    .bunting.bottom{top:auto;bottom:0;transform:scaleX(-1) rotate(180deg)}
-    .bunting svg{width:100%;height:100%}
-    .stage{position:relative;width:min(1200px,100vw);height:min(675px,56.25vw);margin:clamp(8px,3vh,24px) auto 0}
-    .left{position:absolute;left:4%;top:6%;display:flex;flex-direction:column;gap:18px}
-    .title{line-height:.9;text-shadow:0 4px 0 #00000040,0 8px 0 #00000010;display:flex;flex-direction:column;color:var(--ink)}
-    .word{display:inline-flex;align-items:center;gap:10px}
-    .word .cap{background:var(--white);border:3px solid #000;border-radius:8px 8px 16px 16px;padding:2px 8px;font-size:clamp(34px,6vw,88px);font-weight:800;box-shadow:0 6px 0 #00000030}
-    .word .party{width:clamp(26px,4.2vw,48px);height:clamp(26px,4.2vw,48px);background:conic-gradient(from 40deg,#0b2a4a 0 60%,#ff5a71 0 100%);border:3px solid #000;border-radius:6px 6px 24px 6px;transform:rotate(12deg);position:relative}
-    .word .party::after{content:"";position:absolute;right:-7px;top:-7px;width:10px;height:10px;border-radius:50%;background:var(--ink)}
-    .word.big{color:#ff5a71;-webkit-text-stroke:3px #000;text-stroke:3px #000;font-size:clamp(34px,6vw,88px);font-weight:800;letter-spacing:1px;filter:drop-shadow(0 6px 0 #00000030)}
-    .pill{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:12px 22px;width:fit-content;border-radius:999px;background:var(--red);border:3px solid #000;box-shadow:0 8px 0 #00000020,inset 0 -4px 0 var(--red-dark);color:#000;font-weight:800;font-family:'Nunito'}
-    .pill .star{font-size:20px}
-    .cta{cursor:pointer;user-select:none;font-weight:800}
-    .cta.small{padding:10px 18px;font-size:16px}
-    .right{position:absolute;right:5%;top:10%;display:flex;align-items:center;justify-content:center;gap:20px}
-    .avatar{width:clamp(260px,36vw,380px);height:clamp(260px,36vw,380px);border-radius:50%;overflow:hidden;border:8px solid #000;box-shadow:0 16px 0 #00000010,0 0 0 8px #00000005 inset;background:#ddd center/cover no-repeat}
-    .nameTag{position:absolute;bottom:-36px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:999px;background:var(--red);border:3px solid #000;font-weight:900;box-shadow:0 8px 0 #00000020,inset 0 -4px 0 var(--red-dark);display:flex;align-items:center;gap:10px;font-family:'Nunito'}
-    .float-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden}
-    .float{position:absolute;opacity:0.85}
-    .balloon{width:48px;height:60px;border-radius:50% 50% 55% 55%;background:var(--bubble);border:3px solid #000;box-shadow:inset 0 -8px 0 #f79aa9}
-    .balloon::after{content:"";position:absolute;bottom:-20px;left:50%;width:3px;height:22px;background:#000;transform:translateX(-50%)}
-    .heart,.star{font-size:28px;filter:drop-shadow(0 3px 0 #00000020)}
-    .modalBack{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center}
-    .card{width:min(820px,92vw);background:#fff7e9;border-radius:22px;border:6px solid #fff;outline:4px solid #222;padding:18px 22px 24px;box-shadow:0 18px 40px #00000050;position:relative}
-    .closeX{position:absolute;right:8px;top:6px;width:34px;height:34px;border-radius:50%;background:#fff;border:2px solid #222;display:grid;place-items:center;cursor:pointer;font-weight:800}
-    .post{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:stretch;min-height:360px}
-    .post .leftSticker{background:#ffe6ea;border-radius:16px;border:3px solid #222;display:grid;place-items:center;padding:12px;background-image:radial-gradient(#ffced9 1px,transparent 1px);background-size:16px 16px}
-    .post .leftSticker .big-emoji{font-size:120px}
-    .post .rightMsg{border-left:3px solid #222;padding:8px 8px 8px 18px;position:relative;font-family:'Nunito'}
-    .post h3{margin:6px 0 12px;font-family:'Baloo 2';font-size:28px}
-    .post p{margin:0;font-size:18px;line-height:1.55}
-    .post .corner{position:absolute;right:-8px;top:-8px;font-size:42px;transform:rotate(10deg)}
-    .credit{position:fixed;bottom:8px;left:50%;transform:translateX(-50%);font-size:12px;opacity:.7;font-family:'Nunito'}
-    @media (max-width:900px){.post{grid-template-columns:1fr}.post .rightMsg{border-left:none;border-top:3px solid #222;padding-top:14px}}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Happy Birthday</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+  :root{
+    --ink:#0d1324;            /* deep night */
+    --night:#0b1020;          /* bg */
+    --night-2:#121936;        /* bg grad */
+    --glow:#ffd166;           /* golden glow */
+    --accent:#ff5a71;         /* warm red for pills */
+    --accent-dark:#d7465a;
+    --panel:#fff7e9;
+    --panel-line:#222;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background: radial-gradient(1200px 700px at 30% -10%, #1b2145 0%, transparent 60%),
+                linear-gradient(#0b1020, #121936);
+    font-family: 'Baloo 2', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    overflow:hidden;
+    color:#f5f7ff;
+  }
+
+  /* Star canvas + moon */
+  #sky{position:fixed; inset:0; z-index:-2}
+  .moon{
+    position:fixed; right:5%; top:6%;
+    width:min(160px,18vw); aspect-ratio:1/1; border-radius:50%;
+    background:
+      radial-gradient(circle at 35% 35%, #fff 0 30%, #ffe9b3 55%, #f3d78a 70%, transparent 71%),
+      radial-gradient(circle at 70% 70%, #00000030 0 60%, transparent 61%);
+    box-shadow: 0 0 60px 20px #ffe9b380, 0 0 140px 60px #ffe9b320;
+    filter: saturate(1.05);
+    z-index:-1;
+  }
+
+  .stage{
+    position:relative;
+    width:min(1200px,100vw);
+    height:min(675px,56.25vw);    /* 16:9 */
+    margin:clamp(8px,3vh,24px) auto 0;
+  }
+
+  .left{
+    position:absolute; left:5%; top:8%;
+    display:flex; flex-direction:column; gap:18px;
+    text-shadow: 0 0 18px #ffe9b360;
+  }
+
+  .title{ line-height:.9; display:flex; flex-direction:column; }
+  .word{ display:flex; align-items:center; gap:12px }
+  .cap{
+    background:linear-gradient(#fff,#f6f8ff);
+    color:#111; border:3px solid #000;
+    border-radius:10px 10px 18px 18px;
+    padding:4px 12px;
+    font-size: clamp(40px, 7vw, 96px);
+    font-weight:800;
+    box-shadow: 0 10px 0 #00000030;
+  }
+  .party{
+    width: clamp(28px, 4.2vw, 52px); height: clamp(28px, 4.2vw, 52px);
+    border:3px solid #000; border-radius: 6px 6px 24px 6px;
+    background: conic-gradient(from 40deg, #1e2b57 0 60%, #ff5a71 0 100%);
+    transform: rotate(12deg); position:relative;
+  }
+  .party::after{ content:""; position:absolute; right:-7px; top:-7px; width:10px; height:10px; background:#000; border-radius:50% }
+
+  .big{
+    color:#ff5a71; -webkit-text-stroke:3px #000; text-stroke:3px #000;
+    font-size: clamp(40px, 7vw, 96px); font-weight:800; letter-spacing:1px;
+    filter: drop-shadow(0 8px 0 #00000035);
+  }
+
+  .pill{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:12px 22px; border-radius:999px; width:fit-content;
+    border:3px solid #000; background:var(--accent);
+    color:#000; font-weight:900; font-family:'Nunito';
+    box-shadow: 0 10px 0 #00000025, inset 0 -5px 0 var(--accent-dark);
+  }
+  .pill .star{ filter: drop-shadow(0 0 8px #fff6a0) }
+  .cta{ cursor:pointer; user-select:none }
+  .cta.small{ padding:10px 18px; font-size:16px }
+
+  .right{
+    position:absolute; right:6%; top:12%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .avatar{
+    width: clamp(260px, 36vw, 380px); height: clamp(260px, 36vw, 380px);
+    border-radius:50%; overflow:hidden; border:8px solid #000;
+    box-shadow: 0 16px 0 #00000030, 0 0 0 8px #00000010 inset;
+    background:#222 center/cover no-repeat;
+  }
+  .nameTag{
+    position:absolute; bottom:-38px; left:50%; transform:translateX(-50%);
+    padding:10px 22px; border-radius:999px; background:#242a4f; color:#ffe9b3;
+    border:3px solid #000; font-family:'Nunito'; font-weight:900; display:flex; gap:10px;
+    box-shadow: 0 10px 0 #00000035, 0 0 24px #ffe9b360 inset;
+  }
+
+  /* Glitter sparkles */
+  .sparkle{
+    position:fixed; pointer-events:none; z-index:1;
+    font-size:28px; opacity:0; will-change: transform, opacity;
+    text-shadow: 0 0 12px #fff8, 0 0 22px #ffe9b3a0;
+  }
+
+  /* Modal */
+  .modalBack{
+    position:fixed; inset:0; background:#0009; display:none;
+    align-items:center; justify-content:center; z-index:10;
+  }
+  .card{
+    width:min(860px, 92vw); background:var(--panel); color:#222;
+    border-radius:22px; border:6px solid #fff; outline:4px solid var(--panel-line);
+    padding:18px 22px 24px; box-shadow:0 18px 40px #00000080; position:relative;
+  }
+  .closeX{
+    position:absolute; right:8px; top:6px; width:36px; height:36px; border-radius:50%;
+    background:#fff; border:2px solid #222; display:grid; place-items:center;
+    cursor:pointer; font-weight:900; z-index:2;
+  }
+  .post{ display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:stretch; min-height:360px }
+  .leftSticker{
+    background:#ffe6ea; border-radius:16px; border:3px solid #222;
+    display:grid; place-items:center; padding:12px;
+    background-image: radial-gradient(#ffced9 1px, transparent 1px); background-size:16px 16px;
+  }
+  .big-emoji{ font-size:120px }
+  .rightMsg{ border-left:3px solid #222; padding:8px 8px 8px 18px; position:relative; font-family:'Nunito' }
+  .rightMsg h3{ margin:6px 0 12px; font-family:'Baloo 2'; font-size:28px }
+  .rightMsg p{ margin:0; font-size:18px; line-height:1.55 }
+  .corner{ position:absolute; right:-8px; top:-8px; font-size:42px; transform:rotate(10deg) }
+
+  .credit{
+    position:fixed; bottom:8px; left:50%; transform:translateX(-50%);
+    font-size:12px; opacity:.8; color:#c9d1ff; font-family:'Nunito'
+  }
+
+  @media (max-width:900px){
+    .post{ grid-template-columns:1fr }
+    .rightMsg{ border-left:none; border-top:3px solid #222; padding-top:14px }
+  }
+</style>
 </head>
 <body>
-  <div class="grid"></div>
-  <!-- decorations omitted for brevity (unchanged from your version) -->
-  <div class="stage">
-    <div class="left">
-      <div class="title">
-        <div class="word" id="happy"><span class="cap">Happy</span><span class="party"></span></div>
-        <div class="word big" id="birthday">Birthday</div>
+<canvas id="sky"></canvas>
+<div class="moon" aria-hidden="true"></div>
+
+<div class="stage">
+  <div class="left">
+    <div class="title">
+      <div class="word" id="happy">
+        <span class="cap">Happy</span>
+        <span class="party" aria-hidden="true"></span>
       </div>
-      <div class="pill" id="dob"><span class="star">★</span><span class="dateText"></span><span class="star">★</span></div>
-      <div class="pill cta small" id="openCard">Click here <span class="bestieFirst"></span> 💌</div>
+      <div class="big" id="birthday">Birthday</div>
     </div>
-    <div class="right">
-      <div class="avatar" id="avatar"><img src="bestie.jpg" alt="Bestie" style="width:100%;height:100%;object-fit:cover"></div>
-      <div class="nameTag" id="nameTag">😊 <span class="bestieName"></span> <span>♥</span></div>
+
+    <div class="pill" id="dob"><span class="star">★</span><span class="dateText"></span><span class="star">★</span></div>
+    <div class="pill cta small" id="openCard">Click here <span class="bestieFirst"></span> 💌</div>
+  </div>
+
+  <div class="right">
+    <div class="avatar" id="avatar">
+      <img src="bestie.jpg" alt="Bestie" style="width:100%;height:100%;object-fit:cover">
+    </div>
+    <div class="nameTag" id="nameTag">😊 <span class="bestieName"></span> <span>♥</span></div>
+  </div>
+</div>
+
+<!-- glitter layer -->
+<div id="sparkLayer"></div>
+
+<!-- Popup -->
+<div class="modalBack" id="modal" aria-hidden="true">
+  <div class="card" role="dialog" aria-modal="true">
+    <button class="closeX" id="closeX" aria-label="Close">✕</button>
+    <div class="post">
+      <div class="leftSticker"><div class="big-emoji">🐰❤️</div></div>
+      <div class="rightMsg">
+        <h3>To you <span>💖</span></h3>
+        <p id="messageText"></p>
+        <div class="corner">🐱</div>
+      </div>
     </div>
   </div>
-  <div class="float-layer" id="floatLayer"></div>
-  <div class="modalBack" id="modal">
-    <div class="card"><div class="closeX" id="closeX">✕</div>
-      <div class="post">
-        <div class="leftSticker"><div class="big-emoji">🐰❤️</div></div>
-        <div class="rightMsg"><h3>To you <span>💖</span></h3><p id="messageText"></p><div class="corner">🐱</div></div>
-      </div>
-    </div>
-  </div>
-  <div class="credit">Made with ❤️ in VS Code</div>
+</div>
+
+<div class="credit">Made with ❤️ in VS Code</div>
 
 <script>
-  // ======= CONFIG =======
-  const CONFIG = {
-    bestieName: "Likhitha",        // name under photo
-    bestieFirst: "Liku",           // short name for button
-    birthdayText: "12 September 2000",
-    photoPath: "bestie.jpg",
-    popupMessage: "Wishing you the happiest birthday, Liku! 🎉 You are amazing, and I’m lucky to have you in my life.\nStay blessed, smile always, and may all your dreams come true. ❤️",
-    floatCount: 26,
-    duration: 1.2
-  };
+/* ======= CONFIG (edit these) ======= */
+const CONFIG = {
+  bestieName: "Likhitha",
+  bestieFirst: "Likhitha",
+  birthdayText: "12 September 2000",
+  photoPath: "bestie.jpg",
+  popupMessage:
+    "My love, you are a very special girl. I silently thank you for coming into my life.\n" +
+    "Today, I wish you all the best, lots of health, and lots of joy. I hope we’ll celebrate many more birthdays like this together.\n" +
+    "Happy birthday to you. I love you. 💖",
+  sparkleEmojis: ["✨","🌟","💫","🪄"],
+  sparklePerSecond: 8,     // how many glitter pops per second
+  duration: 1.0            // overall animation speed (lower is faster)
+};
 
-  // Apply config text
-  document.querySelectorAll(".bestieName").forEach(el => el.textContent = CONFIG.bestieName);
-  document.querySelectorAll(".bestieFirst").forEach(el => el.textContent = CONFIG.bestieFirst);
-  document.querySelector(".dateText").textContent = CONFIG.birthdayText;
-  document.querySelector("#avatar img").src = CONFIG.photoPath;
-  document.getElementById("messageText").textContent = CONFIG.popupMessage;
+/* ======= Apply text & image ======= */
+document.querySelectorAll(".bestieName").forEach(el=>el.textContent=CONFIG.bestieName);
+document.querySelectorAll(".bestieFirst").forEach(el=>el.textContent=CONFIG.bestieFirst);
+document.querySelector(".dateText").textContent = CONFIG.birthdayText;
+document.querySelector("#avatar img").src = CONFIG.photoPath;
+document.getElementById("messageText").textContent = CONFIG.popupMessage;
 
-  // ======= Animations (unchanged) =======
-  const tl = gsap.timeline({ defaults:{ ease:"back.out(1.8)" } });
-  tl.from("#happy",{y:120,opacity:0,duration:.9*CONFIG.duration})
-    .from("#birthday",{y:140,opacity:0,duration:1*CONFIG.duration},"-=0.5")
-    .from("#dob",{y:80,opacity:0,duration:.7*CONFIG.duration},"-=0.4")
-    .from("#avatar",{x:200,scale:.6,opacity:0,duration:.9*CONFIG.duration},"-=0.6")
-    .from("#nameTag",{y:40,opacity:0,duration:.6*CONFIG.duration},"-=0.5")
-    .from("#openCard",{y:40,opacity:0,duration:.6*CONFIG.duration},"-=0.5");
-  gsap.to("#avatar",{y:6,duration:2.5,yoyo:true,repeat:-1,ease:"sine.inOut"});
-  gsap.to("#nameTag",{y:3,duration:2,yoyo:true,repeat:-1,ease:"sine.inOut"});
+/* ======= Starry sky (canvas twinkles) ======= */
+const sky = document.getElementById('sky');
+const ctx = sky.getContext('2d');
+let stars = [], W, H;
 
-  // Floating items
-  const floatLayer=document.getElementById("floatLayer");
-  const EMOJIS=["⭐","✨","💖","💗","💞","💫"];
-  for(let i=0;i<CONFIG.floatCount;i++){
-    const kind=Math.random();const el=document.createElement("div");
-    el.classList.add("float");
-    if(kind<0.35){el.classList.add("balloon");}
-    else if(kind<0.7){el.classList.add("heart");el.textContent=EMOJIS[Math.floor(Math.random()*EMOJIS.length)];}
-    else{el.classList.add("star");el.textContent="★";}
-    el.style.left=Math.random()*100+"vw";
-    el.style.transform=`scale(${0.8+Math.random()*1.2})`;
-    floatLayer.appendChild(el);
-    const dur=10+Math.random()*10;
-    gsap.fromTo(el,{y:window.innerHeight+50,opacity:0.0},
-      {y:-120,opacity:0.9,duration:dur,delay:Math.random()*5,
-       ease:"sine.inOut",repeat:-1,onRepeat(){gsap.to(el,{x:(Math.random()*2-1)*80,duration:dur,ease:"sine.inOut"})}});
+function resize(){
+  W = sky.width = window.innerWidth;
+  H = sky.height = window.innerHeight;
+  stars = [];
+  const count = Math.floor((W*H)/12000); // density
+  for(let i=0;i<count;i++){
+    stars.push({
+      x: Math.random()*W,
+      y: Math.random()*H,
+      r: Math.random()*1.2 + 0.3,
+      a: Math.random()*1,
+      s: Math.random()*0.02 + 0.005 // twinkle speed
+    });
   }
+}
+window.addEventListener('resize', resize);
+resize();
 
-  // ======= Popup interactions =======
-  const openCard=document.getElementById("openCard");
-  const modal=document.getElementById("modal");
-  const closeX=document.getElementById("closeX");
-  function openModal(){
-    modal.style.display="flex";
-    if(window.gsap){gsap.fromTo(".card",{scale:.85,opacity:0},{scale:1,opacity:1,duration:.35,ease:"back.out(1.8)"})}
+function drawStars(){
+  ctx.clearRect(0,0,W,H);
+  for (const st of stars){
+    st.a += st.s;
+    const alpha = 0.4 + 0.6 * Math.abs(Math.sin(st.a));
+    ctx.beginPath();
+    ctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(255, 230, 180, ${alpha})`;
+    ctx.fill();
   }
-  function closeModal(){
-    if(window.gsap){gsap.to(".card",{scale:.9,opacity:0,duration:.25,onComplete:()=>modal.style.display="none"})}
-    else{modal.style.display="none";}
+  requestAnimationFrame(drawStars);
+}
+drawStars();
+
+/* ======= Title & avatar entrance ======= */
+const tl = gsap.timeline({ defaults:{ ease:"back.out(1.8)" } });
+tl.from("#happy",{y:120,opacity:0,duration:.9*CONFIG.duration})
+  .from("#birthday",{y:140,opacity:0,duration:1.0*CONFIG.duration},"-=0.5")
+  .from("#dob",{y:80,opacity:0,duration:.7*CONFIG.duration},"-=0.4")
+  .from("#avatar",{x:200,scale:.6,opacity:0,duration:.9*CONFIG.duration},"-=0.6")
+  .from("#nameTag",{y:40,opacity:0,duration:.6*CONFIG.duration},"-=0.5")
+  .from("#openCard",{y:40,opacity:0,duration:.6*CONFIG.duration},"-=0.5");
+gsap.to("#avatar",{y:6,duration:2.5,yoyo:true,repeat:-1,ease:"sine.inOut"});
+gsap.to("#nameTag",{y:3,duration:2,yoyo:true,repeat:-1,ease:"sine.inOut"});
+
+/* ======= Glitter sparkles (appear, glitter, vanish) ======= */
+const sparkLayer = document.getElementById('sparkLayer');
+function spawnSparkle(){
+  const s = document.createElement('div');
+  s.className = 'sparkle';
+  s.textContent = CONFIG.sparkleEmojis[Math.floor(Math.random()*CONFIG.sparkleEmojis.length)];
+  const x = Math.random()*window.innerWidth;
+  const y = Math.random()*window.innerHeight;
+  s.style.left = x + 'px';
+  s.style.top  = y + 'px';
+  s.style.transform = 'scale(0.2) rotate('+(Math.random()*60-30)+'deg)';
+  sparkLayer.appendChild(s);
+  gsap.to(s, {opacity:1, duration:0.25});
+  gsap.to(s, {
+    keyframes:[
+      {scale:1.1, duration:0.5, ease:"back.out(2)"},
+      {scale:0.9, duration:0.3, ease:"sine.inOut"},
+      {scale:0, opacity:0, duration:0.6, ease:"power1.in"}
+    ],
+    onComplete: ()=> s.remove()
+  });
+}
+setInterval(spawnSparkle, 1000/CONFIG.sparklePerSecond);
+
+/* ======= Popup interactions (robust close) ======= */
+const openCard = document.getElementById("openCard");
+const modal    = document.getElementById("modal");
+const closeX   = document.getElementById("closeX");
+
+function openModal(){
+  modal.style.display = "flex";
+  modal.setAttribute('aria-hidden','false');
+  if (window.gsap) {
+    gsap.fromTo(".card",{scale:.85,opacity:0},{scale:1,opacity:1,duration:.35,ease:"back.out(1.8)"});
   }
-  openCard.addEventListener("click",openModal);
-  closeX.addEventListener("click",closeModal);
-  modal.addEventListener("click",(e)=>{if(e.target===modal)closeModal();});
-  document.addEventListener("keydown",(e)=>{if(e.key==="Escape"&&modal.style.display==="flex")closeModal();});
+}
+function closeModal(){
+  const hide = ()=>{ modal.style.display="none"; modal.setAttribute('aria-hidden','true'); };
+  if (window.gsap) {
+    gsap.to(".card",{scale:.9,opacity:0,duration:.25,onComplete:hide});
+  } else { hide(); }
+}
+
+// Attach listeners (and stop bubbling from the inner card so outside-click works)
+openCard.addEventListener("click", openModal);
+closeX.addEventListener("click", (e)=>{ e.stopPropagation(); closeModal(); });
+modal.addEventListener("click", (e)=>{ if(e.target===modal) closeModal(); });
+document.addEventListener("keydown", (e)=>{ if(e.key==="Escape" && modal.style.display==="flex") closeModal(); });
 </script>
 </body>
 </html>
