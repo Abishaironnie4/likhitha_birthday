@@ -22,11 +22,11 @@
     background:linear-gradient(to right,var(--grid)1px,transparent 1px) 0 0/40px 40px,
                linear-gradient(to bottom,var(--grid)1px,transparent 1px) 0 0/40px 40px;opacity:.75}
 
-  /* ===== BUNTING: two curved strings with flags following the curve ===== */
+  /* ===== BUNTING: two curved strings, flags hang, NO black bar ===== */
   .bunting{position:fixed;left:0;right:0;top:0;height:130px;pointer-events:none;z-index:2}
   .bunting svg{width:100%;height:100%}
   .string{fill:none;stroke:#ff6e86;stroke-width:8;stroke-linecap:round;filter:drop-shadow(0 4px 0 #ffb4c1)}
-  .flag{stroke:#111;stroke-width:3;filter:drop-shadow(0 2px 0 #0004)}
+  .flag{filter:drop-shadow(0 1px 0 #0003)} /* soft shadow only, NO stroke outline */
 
   /* Layout – centered vertically */
   .wrap{position:relative;height:100%;display:flex;align-items:center;justify-content:center}
@@ -45,6 +45,11 @@
         filter:drop-shadow(0 6px 0 #0002);
         transform:translateY(40px);opacity:0;letter-spacing:-0.03em}
 
+  /* Cake after Birthday */
+  .cake{display:inline-block;margin-left:.25rem;font-size:clamp(30px,4.2vw,48px);transform-origin:50% 100%;
+        animation:cakeWiggle 2.2s ease-in-out infinite}
+  @keyframes cakeWiggle{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-4px) rotate(6deg)}}
+
   /* Hat on Y of Happy (bigger) */
   .hat{position:absolute;width:clamp(36px,5.6vw,72px);height:clamp(36px,5.6vw,72px);left:58%;top:-24%;
        transform-origin:30% 90%;animation:hatSlide 2.6s ease-in-out infinite}
@@ -60,8 +65,8 @@
   .nameTag{position:absolute;bottom:-34px;left:50%;transform:translateX(-50%);padding:10px 22px;border-radius:999px;background:var(--pill);color:#111;
            border:3px solid #111;font-family:'Nunito';font-weight:900;box-shadow:0 8px 0 #0002,inset 0 -5px 0 var(--pill-d);opacity:0}
 
-  /* Glittering background (gate + main) */
-  .sparkle{position:fixed;pointer-events:none;font-size:28px;opacity:0;text-shadow:0 0 10px #fff6,0 0 18px #ffd7;z-index:25}
+  /* Glittering background (behind UI so it never covers texts) */
+  .sparkle{position:fixed;pointer-events:none;font-size:28px;opacity:0;text-shadow:0 0 10px #fff6,0 0 18px #ffd7;z-index:1} /* lower z */
 
   /* Popup */
   .modalBack{position:fixed;inset:0;background:#0005;display:none;align-items:center;justify-content:center;z-index:30}
@@ -86,8 +91,8 @@
   .sheen{position:absolute;inset:0;border-radius:30px;background:linear-gradient(120deg,#ffffff66 0 10%,transparent 10% 60%,#ffffff33 60% 68%,transparent 68% 100%);mix-blend-mode:screen;animation:sheen 2.8s linear infinite}
   @keyframes sheen{0%{background-position:-200% 0}100%{background-position:200% 0}}
 
-  /* Curved OPEN IT text above the gift */
-  .openArc{position:absolute;top:-50px;left:50%;transform:translateX(-50%);width:280px;height:90px;pointer-events:none}
+  /* Curved OPEN IT text above the gift (stencil arc) */
+  .openArc{position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:260px;height:100px;pointer-events:none}
   .openArc text{font-family:'Monotype Corsiva','Great Vibes','Segoe Script',cursive;fill:#111;font-size:34px;filter:drop-shadow(0 2px 0 #fff)}
   .openArc g{animation:pulseZoom 1.6s ease-in-out infinite}
   @keyframes pulseZoom{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
@@ -101,58 +106,54 @@
 <body>
 <div class="grid"></div>
 
-<!-- ===== BUNTING (two hanging arcs, flags follow curve) ===== -->
+<!-- ===== BUNTING (two hanging arcs, flags follow curve; no black line) ===== -->
 <div class="bunting">
   <svg viewBox="0 0 1200 130" preserveAspectRatio="none">
     <defs>
       <linearGradient id="triPink" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="#ff8fa3"/><stop offset="1" stop-color="#ff5a71"/>
       </linearGradient>
-      <!-- a single flag -->
-      <polygon id="tri" class="flag" points="0,0 24,0 12,28" fill="url(#triPink)"/>
-      <polygon id="triL" class="flag" points="0,0 24,0 12,28" fill="#ffd4db"/>
+      <!-- single triangle, no stroke -->
+      <polygon id="tri" class="flag" points="0,0 26,0 13,30" fill="url(#triPink)"/>
+      <polygon id="triL" class="flag" points="0,0 26,0 13,30" fill="#ffd4db"/>
     </defs>
 
-    <!-- strings -->
+    <!-- curved strings -->
     <path id="leftStr"  class="string" d="M-40,78 Q260,12 520,70" />
     <path id="rightStr" class="string" d="M680,70 Q940,12 1240,78" />
 
-    <!-- left chain of flags, rotated & dropped to look hung -->
-    <g transform="translate(30,62) rotate(-9)">
-      <use href="#tri"  transform="translate(0,0)"/>
-      <use href="#triL" transform="translate(32,2) rotate(-2)"/>
-      <use href="#tri"  transform="translate(64,4) rotate(-4)"/>
-      <use href="#triL" transform="translate(96,7) rotate(-6)"/>
-      <use href="#tri"  transform="translate(128,9) rotate(-8)"/>
-      <use href="#triL" transform="translate(160,12) rotate(-10)"/>
-      <use href="#tri"  transform="translate(192,14) rotate(-12)"/>
-      <use href="#triL" transform="translate(224,16) rotate(-14)"/>
-      <use href="#tri"  transform="translate(256,19) rotate(-16)"/>
-      <use href="#triL" transform="translate(288,21) rotate(-18)"/>
-      <use href="#tri"  transform="translate(320,23) rotate(-20)"/>
-      <use href="#triL" transform="translate(352,25) rotate(-22)"/>
-      <use href="#tri"  transform="translate(384,27) rotate(-24)"/>
-      <use href="#triL" transform="translate(416,28) rotate(-26)"/>
-      <use href="#tri"  transform="translate(448,29) rotate(-28)"/>
+    <!-- left flags: progressively lower along the curve -->
+    <g>
+      <use href="#tri"  transform="translate(10,66) rotate(-6)"/>
+      <use href="#triL" transform="translate(50,62) rotate(-7)"/>
+      <use href="#tri"  transform="translate(90,60) rotate(-8)"/>
+      <use href="#triL" transform="translate(130,58) rotate(-9)"/>
+      <use href="#tri"  transform="translate(170,56) rotate(-10)"/>
+      <use href="#triL" transform="translate(210,55) rotate(-11)"/>
+      <use href="#tri"  transform="translate(250,54) rotate(-12)"/>
+      <use href="#triL" transform="translate(290,54) rotate(-13)"/>
+      <use href="#tri"  transform="translate(330,55) rotate(-14)"/>
+      <use href="#triL" transform="translate(370,57) rotate(-16)"/>
+      <use href="#tri"  transform="translate(410,60) rotate(-18)"/>
+      <use href="#triL" transform="translate(450,63) rotate(-20)"/>
+      <use href="#tri"  transform="translate(490,66) rotate(-22)"/>
     </g>
 
-    <!-- right chain of flags -->
-    <g transform="translate(720,62) rotate(9)">
-      <use href="#tri"  transform="translate(0,0)"/>
-      <use href="#triL" transform="translate(32,2) rotate(2)"/>
-      <use href="#tri"  transform="translate(64,4) rotate(4)"/>
-      <use href="#triL" transform="translate(96,7) rotate(6)"/>
-      <use href="#tri"  transform="translate(128,9) rotate(8)"/>
-      <use href="#triL" transform="translate(160,12) rotate(10)"/>
-      <use href="#tri"  transform="translate(192,14) rotate(12)"/>
-      <use href="#triL" transform="translate(224,16) rotate(14)"/>
-      <use href="#tri"  transform="translate(256,19) rotate(16)"/>
-      <use href="#triL" transform="translate(288,21) rotate(18)"/>
-      <use href="#tri"  transform="translate(320,23) rotate(20)"/>
-      <use href="#triL" transform="translate(352,25) rotate(22)"/>
-      <use href="#tri"  transform="translate(384,27) rotate(24)"/>
-      <use href="#triL" transform="translate(416,28) rotate(26)"/>
-      <use href="#tri"  transform="translate(448,29) rotate(28)"/>
+    <!-- right flags -->
+    <g>
+      <use href="#tri"  transform="translate(700,66) rotate(6)"/>
+      <use href="#triL" transform="translate(740,63) rotate(8)"/>
+      <use href="#tri"  transform="translate(780,60) rotate(10)"/>
+      <use href="#triL" transform="translate(820,58) rotate(11)"/>
+      <use href="#tri"  transform="translate(860,56) rotate(12)"/>
+      <use href="#triL" transform="translate(900,55) rotate(13)"/>
+      <use href="#tri"  transform="translate(940,54) rotate(14)"/>
+      <use href="#triL" transform="translate(980,55) rotate(15)"/>
+      <use href="#tri"  transform="translate(1020,56) rotate(16)"/>
+      <use href="#triL" transform="translate(1060,58) rotate(17)"/>
+      <use href="#tri"  transform="translate(1100,60) rotate(18)"/>
+      <use href="#triL" transform="translate(1140,63) rotate(19)"/>
+      <use href="#tri"  transform="translate(1180,66) rotate(21)"/>
     </g>
   </svg>
 </div>
@@ -161,25 +162,19 @@
 <div class="gate" id="gate">
   <div class="gateInner">
     <div class="giftWrap">
-      <!-- Curved "Open it" label above gift -->
-      <svg class="openArc" viewBox="0 0 280 90">
-        <defs>
-          <path id="arcPath" d="M10,70 Q140,10 270,70"/>
-        </defs>
-        <g>
-          <text>
-            <textPath href="#arcPath" startOffset="50%" text-anchor="middle">Open it 🎁</textPath>
-          </text>
-        </g>
+      <!-- Curved "Open it" stencil above gift -->
+      <svg class="openArc" viewBox="0 0 260 100">
+        <defs><path id="arcPath" d="M20,80 Q130,18 240,80"/></defs>
+        <g><text><textPath href="#arcPath" startOffset="50%" text-anchor="middle">Open it 🎁</textPath></text></g>
       </svg>
 
       <div class="giftImg bob" id="giftBox">
-        <img src="gift.jpg?v=3" alt="gift">
+        <img src="gift.jpg?v=4" alt="gift">
         <div class="sheen"></div>
       </div>
     </div>
 
-    <!-- Simple name label (no bullet) -->
+    <!-- Cursive label (no bullet) -->
     <div class="typeLabel" id="typeLabel"></div>
     <input class="nameInput" id="nameInput" placeholder="Type here…" />
   </div>
@@ -225,8 +220,8 @@
 const CONFIG = {
   bestieName: "Likhitha",
   buttonName: "Likki Bondam",
-  photoPath: "bestie.jpg?v=8",
-  giftPath:  "gift.jpg?v=3",
+  photoPath: "bestie.jpg?v=9",
+  giftPath:  "gift.jpg?v=4",
   unlockWord: "bondam",
   happy: "Happy",
   birthday: "Birthday",
@@ -243,7 +238,7 @@ Happy birthday to you. I love you. 💗`,
 function typewrite(el, text, speed=28, done){ el.textContent=''; let i=0;
   const t=setInterval(()=>{ el.textContent+= text[i++] || ''; if(i>text.length){clearInterval(t); done&&done();}}, speed);}
 
-/* ===== Sparkles everywhere ===== */
+/* ===== Sparkles everywhere (behind UI) ===== */
 const sparkLayer = document.getElementById('sparkLayer');
 function sparkle(){
   const s=document.createElement('div'); s.className='sparkle';
@@ -259,9 +254,9 @@ function sparkle(){
 }
 setInterval(sparkle, 1000/CONFIG.sparklesPerSecond);
 
-/* ===== Audio autoplay + resume on interaction ===== */
+/* ===== Audio autoplay + resume on user interaction ===== */
 const bgm=document.getElementById('bgm');
-function tryPlay(){ bgm.play().catch(()=>{/* blocked until user gesture */}); }
+function tryPlay(){ bgm.play().catch(()=>{}); }
 tryPlay();
 ['click','touchstart','keydown'].forEach(evt=>document.addEventListener(evt,tryPlay,{once:false}));
 
@@ -270,7 +265,7 @@ const gate = document.getElementById('gate');
 const typeLabel = document.getElementById('typeLabel');
 const nameInput = document.getElementById('nameInput');
 
-typewrite(typeLabel, "Enter your name", 22); // no bullet
+typewrite(typeLabel, "Enter your name", 22);
 
 let wrong = 0;
 nameInput.addEventListener('keydown', (e)=>{
@@ -283,8 +278,7 @@ nameInput.addEventListener('keydown', (e)=>{
     wrong++;
     typeLabel.textContent = wrong===1 ? "ehe ne name kadhu  nen pettindi"
                                       : "hehe oorike cheppa le.. nen pettindi kadhu nuv nannu pilchedhi";
-    // clear, but do NOT select/highlight
-    nameInput.value = "";
+    nameInput.value = ""; // clear (no highlight)
   }
 });
 
@@ -336,6 +330,12 @@ const nameTag = document.getElementById('nameTag');
 function startScene(){
   buildWord(rowHappy, CONFIG.happy, 'tile');
   buildWord(rowBirth, CONFIG.birthday, 'coral');
+
+  // add a moving cake after "Birthday"
+  const cake = document.createElement('span');
+  cake.className = 'cake';
+  cake.textContent = '🍰';
+  rowBirth.appendChild(cake);
 
   document.querySelector('.bestieName').textContent = CONFIG.bestieName;
   document.querySelector('.bestieFirst').textContent = CONFIG.buttonName;
