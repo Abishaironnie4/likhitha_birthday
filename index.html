@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@700;800&family=Poppins:wght@600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 
 <style>
-/* 🛠️ FIX: Cleaned up variable definitions to prevent spacing/syntax errors */
+/* 🛠️ FIXED: Cleaned up variable definitions using standard spacing */
 :root {
   --bg: #ffe9ee; 
   --grid: #ffdbe3; 
@@ -641,7 +641,7 @@ body {
 <audio id="bgm" src="ringtone.mp3" loop></audio>
 
 <script>
-/* ===== CONFIG - UPDATED FOR 5 PICTURES ===== */
+/* ===== CONFIG - UPDATED FOR 5 PICTURES (Paths and Static Text) ===== */
 const CONFIG = {
   bestieName: "Likhitha",
   buttonName: "Likki Bondam",
@@ -659,21 +659,21 @@ Happy birthday to you. I love you. 💗`,
   sparklesPerSecond: 18,
   sparkSet: ["✨","🌟","💖","💫","🪄","⭐","🎈","🍬","💗","🎀","🎉","💕","💝"],
   
-  // *** NEW: Gallery Items (Only image paths needed now) ***
+  // *** Gallery Items: You must ensure these 5 files exist ***
   galleryItems: [
-    { image: "pic1.jpg" }, // CHANGE THIS to your first image file name
-    { image: "pic2.jpg" }, // CHANGE THIS to your second image file name
-    { image: "pic3.jpg" }, // CHANGE THIS to your third image file name
-    { image: "pic4.jpg" }, // CHANGE THIS to your fourth image file name
-    { image: "pic5.jpg" }  // CHANGE THIS to your fifth image file name
+    { image: "pic1.jpg" }, 
+    { image: "pic2.jpg" }, 
+    { image: "pic3.jpg" }, 
+    { image: "pic4.jpg" }, 
+    { image: "pic5.jpg" }  
   ]
 };
 
-/* ===== typewriter ===== */
+/* ===== typewriter (Unchanged) ===== */
 function typewrite(el, text, speed=28, done){ el.textContent=''; let i=0;
   const t=setInterval(()=>{ el.textContent+= text[i++] || ''; if(i>text.length){clearInterval(t); done&&done();}}, speed);}
 
-/* ===== Sparkles everywhere (behind UI) ===== */
+/* ===== Sparkles everywhere (Unchanged) ===== */
 const sparkLayer = document.getElementById('sparkLayer');
 function sparkle(){
   const s=document.createElement('div'); s.className='sparkle';
@@ -689,13 +689,20 @@ function sparkle(){
 }
 setInterval(sparkle, 1000/CONFIG.sparklesPerSecond);
 
-/* ===== Audio autoplay + resume on user interaction ===== */
+/* ===================================== */
+/* ===== Audio autoplay (FIXED) ===== */
+/* ===================================== */
 const bgm=document.getElementById('bgm');
 function tryPlay(){ bgm.play().catch(()=>{}); }
+
+// Attempt to play music immediately when the page loads
+tryPlay(); 
+
+// Keep interaction listeners as a fallback if the browser requires a click/tap
 ['click','touchstart','keydown'].forEach(evt=>document.addEventListener(evt,tryPlay,{once:false}));
 
 /* ===================================== */
-/* ===== VIDEO & GATE HANDLING ===== */
+/* ===== VIDEO & GATE HANDLING (Unchanged) ===== */
 /* ===================================== */
 const videoOverlay = document.getElementById('videoOverlay');
 const introVideo = document.getElementById('introVideo');
@@ -781,10 +788,8 @@ function animateWord(container, placeHatOnY=false){
 const avatar = document.getElementById('avatar');
 const nameTag = document.getElementById('nameTag');
 
-/* ===== Start scene ===== */
+/* ===== Start scene (Unchanged) ===== */
 function startScene(){
-    tryPlay();
-    
     buildWord(rowHappy, CONFIG.happy, 'tile');
     buildWord(rowBirth, CONFIG.birthday, 'coral');
 
@@ -818,7 +823,7 @@ const modal=document.getElementById('modal');
 const openCard=document.getElementById('openCard');
 const closeX=document.getElementById('closeX'); 
 const galleryImage = document.getElementById('galleryImage');
-const typeTitle = document.getElementById('typeTitle'); // Re-using original IDs
+const typeTitle = document.getElementById('typeTitle'); 
 const typeBody = document.getElementById('typeBody');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
