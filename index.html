@@ -302,7 +302,7 @@ body {
   position: relative;
 }
 
-/* Left side (Image Slideshow) */
+/* Left side (Image/Video Slideshow) */
 .leftSticker {
   background: #ffe6ea;
   border: 3px solid #222;
@@ -316,11 +316,14 @@ body {
   overflow: hidden;
 }
 
-#galleryImage {
+/* New CSS for dynamic media content */
+.leftSticker .media-content {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
   border-radius: 10px;
+  width: 100%; /* Ensure content takes full width */
+  height: 100%; /* Ensure content takes full height */
 }
 
 /* Arrows for Navigation */
@@ -607,7 +610,7 @@ body {
       <div class="pill" id="openCard">Click here <span class="bestieFirst">Likki Bondam</span> 💌</div>
     </div>
     <div class="right">
-      <div class="avatar" id="avatar"><img src="bestie.png" alt="" style="width:100%;height:100%;object-fit:cover"></div>
+      <div class="avatar" id="avatar"><img src="bestie.jpg" alt="" style="width:100%;height:100%;object-fit:cover"></div>
       <div class="nameTag" id="nameTag"><span class="bestieName">Likhitha</span> ♥</div>
       </div>
     </div>
@@ -621,9 +624,7 @@ body {
     
     <div class="post">
       
-      <div class="leftSticker">
-        <img id="galleryImage" src="" alt="Gallery Photo">
-        
+      <div class="leftSticker" id="leftStickerContent">
         <button class="nav-arrow" id="prevBtn">❮</button>
         <button class="nav-arrow" id="nextBtn">❯</button>
       </div>
@@ -641,16 +642,16 @@ body {
 <audio id="bgm" src="ringtone.mp3" loop></audio>
 
 <script>
-/* ===== CONFIG - UPDATED FOR 5 PICTURES (Paths and Static Text) ===== */
+/* ===== CONFIG - UPDATED FOR 9 PICTURES AND 1 FINAL VIDEO ===== */
 const CONFIG = {
   bestieName: "Likhitha",
   buttonName: "Likki Bondam",
-  photoPath: "bestie.png?v=9",
+  photoPath: "bestie.jpg?v=9",
   giftPath:  "gift.jpg?v=4",
   unlockWord: "bondam",
   happy: "Happy",
   birthday: "Birthday",
-  // Single text block content that applies to ALL images
+  // Single text block content that applies to ALL images/videos
   staticTitle: "To you 💖",
   staticBody:
 `My love, you are a very special girl. I silently thank you for coming into my life.
@@ -659,13 +660,18 @@ Happy birthday to you. I love you. 💗`,
   sparklesPerSecond: 18,
   sparkSet: ["✨","🌟","💖","💫","🪄","⭐","🎈","🍬","💗","🎀","🎉","💕","💝"],
   
-  // *** Gallery Items: You must ensure these 5 files exist ***
+  // *** Gallery Items (Total 10 slides: 9 images + 1 video) ***
   galleryItems: [
-    { image: "pic1.jpg" }, 
-    { image: "pic2.jpg" }, 
-    { image: "pic3.jpg" }, 
-    { image: "pic4.jpg" }, 
-    { image: "pic5.jpg" }  
+    { type: "image", src: "pic1.jpg" }, 
+    { type: "image", src: "pic2.jpg" }, 
+    { type: "image", src: "pic3.jpg" }, 
+    { type: "image", src: "pic4.jpg" }, 
+    { type: "image", src: "pic5.jpg" },
+    { type: "image", src: "pic6.jpg" }, // New picture 6
+    { type: "image", src: "pic7.jpg" }, // New picture 7
+    { type: "image", src: "pic8.jpg" }, // New picture 8
+    { type: "image", src: "pic9.jpg" }, // New picture 9
+    { type: "video", src: "last-video.mp4" } // New video at the end
   ]
 };
 
@@ -696,7 +702,6 @@ const bgm=document.getElementById('bgm');
 function tryPlay(){ bgm.play().catch(()=>{}); }
 
 // **--- FIX: Call tryPlay() immediately on script load ---**
-// This attempts to start the background music before the video starts playing.
 tryPlay(); 
 
 // Keep interaction listeners as a fallback if the browser requires a click/tap
@@ -712,7 +717,6 @@ const typeLabel = document.getElementById('typeLabel');
 const nameInput = document.getElementById('nameInput');
 
 function playIntroVideo() {
-    // Note: The video is MUTED, which allows it to autoplay automatically in most browsers.
     introVideo.play().catch(e => console.log("Video autoplay failed (browser restrictions). Waiting for user interaction.", e));
 }
 
@@ -824,7 +828,8 @@ function startScene(){
 const modal=document.getElementById('modal'); 
 const openCard=document.getElementById('openCard');
 const closeX=document.getElementById('closeX'); 
-const galleryImage = document.getElementById('galleryImage');
+// const galleryImage = document.getElementById('galleryImage'); // No longer needed as we use the container
+const leftStickerContent = document.getElementById('leftStickerContent');
 const typeTitle = document.getElementById('typeTitle'); 
 const typeBody = document.getElementById('typeBody');
 const prevBtn = document.getElementById('prevBtn');
@@ -836,8 +841,32 @@ let messageTyped = false;
 function updateGallery(index) {
   const item = CONFIG.galleryItems[index];
   
-  // Update image source
-  galleryImage.src = item.image; 
+  // Clear previous content
+  leftStickerContent.innerHTML = '';
+  
+  let mediaElement;
+
+  if (item.type === "image") {
+      mediaElement = document.createElement('img');
+      mediaElement.src = item.src;
+      mediaElement.alt = `Gallery Image ${index + 1}`;
+      mediaElement.classList.add('media-content');
+      
+  } else if (item.type === "video") {
+      mediaElement = document.createElement('video');
+      mediaElement.src = item.src;
+      mediaElement.classList.add('media-content');
+      mediaElement.autoplay = true;
+      mediaElement.loop = true;
+      mediaElement.controls = true;
+  }
+
+  // Add the media element to the container
+  leftStickerContent.appendChild(mediaElement);
+
+  // Re-add navigation buttons
+  leftStickerContent.appendChild(prevBtn);
+  leftStickerContent.appendChild(nextBtn);
   
   // Disable/enable arrows
   prevBtn.disabled = index === 0;
